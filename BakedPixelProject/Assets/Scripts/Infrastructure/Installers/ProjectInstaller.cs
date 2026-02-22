@@ -1,20 +1,22 @@
-﻿using VContainer;
+﻿using Infrastructure.Initializers;
+using Infrastructure.StateMachines.States.DIExtensions;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Infrastructure.Installers
 {
 	public class ProjectInstaller : MonoInstaller
 	{
+		[SerializeField] private ProjectInitializer _projectInitializer;
+		
 		public override void Install(IContainerBuilder builder)
 		{
-			 // builder
-				// .RegisterGlobalServices()
-				// .RegisterGlobalFactories()
-				// .RegisterGlobalUIStates()
-				// .RegisterGlobalUserInterface()
-				// .RegisterGlobalBattleStateMachine()
-				// ;
-			 //
-			 // builder.RegisterEntryPoint<GameBootstrapper>();
+			builder
+				.RegisterGameStateMachine()
+				.RegisterFactories()
+				.RegisterComponent(_projectInitializer).AsImplementedInterfaces()
+				;
 		}
 	}
 }

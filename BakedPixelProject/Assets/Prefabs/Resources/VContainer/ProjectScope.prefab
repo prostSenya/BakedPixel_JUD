@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 195397381990819345}
   - component: {fileID: 8928737232823987611}
+  - component: {fileID: 168879447013166147}
+  - component: {fileID: 599355926284479471}
   m_Layer: 0
   m_Name: ProjectScope
   m_TagString: Untagged
@@ -48,4 +50,30 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _defaultServicesInstallers: []
+  _defaultServicesInstallers:
+  - {fileID: 168879447013166147}
+--- !u!114 &168879447013166147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592382737642528613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 280d8720b8bb4f048980b23d7d284375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _projectInitializer: {fileID: 599355926284479471}
+--- !u!114 &599355926284479471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592382737642528613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d48004bc3d4488dac551ea39daee147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
