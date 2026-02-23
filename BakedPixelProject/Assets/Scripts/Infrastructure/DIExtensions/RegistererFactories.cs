@@ -1,7 +1,7 @@
 ﻿using Services.StateFactories;
 using VContainer;
 
-namespace Infrastructure.StateMachines.States.DIExtensions
+namespace Infrastructure.DIExtensions
 {
 	public static partial class RegistererGameStateMachine
 	{

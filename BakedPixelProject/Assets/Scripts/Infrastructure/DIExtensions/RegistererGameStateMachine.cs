@@ -1,7 +1,8 @@
-﻿using Infrastructure.StateMachines.States.Implementations;
+﻿using Infrastructure.StateMachines;
+using Infrastructure.StateMachines.States.Implementations;
 using VContainer;
 
-namespace Infrastructure.StateMachines.States.DIExtensions
+namespace Infrastructure.DIExtensions
 {
 	public static partial class RegistererGameStateMachine
 	{

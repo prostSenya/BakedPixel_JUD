@@ -1,5 +1,5 @@
-﻿using Infrastructure.Initializers;
-using Infrastructure.StateMachines.States.DIExtensions;
+﻿using Infrastructure.DIExtensions;
+using Infrastructure.Initializers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -15,6 +15,7 @@ namespace Infrastructure.Installers
 			builder
 				.RegisterGameStateMachine()
 				.RegisterFactories()
+				.RegisterServices()
 				.RegisterComponent(_projectInitializer).AsImplementedInterfaces()
 				;
 		}

@@ -1,32 +1,27 @@
+using Cysharp.Threading.Tasks;
 using Infrastructure.StateMachines.States.Interfaces;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using Services.LoadSceneServices;
 
 namespace Infrastructure.StateMachines.States.Implementations
 {
-	public class LoadSceneState : IState
+	public class LoadSceneState : IPayloadedState<SceneLoadPayload>
 	{
-		private const string SceneName = "GameplayScene";
-		private readonly IGameStateMachine _gameStateMachine;
+		private readonly ILoadSceneService _loadSceneService;
 
-		public LoadSceneState(IGameStateMachine gameStateMachine)
+		public LoadSceneState(ILoadSceneService loadSceneService)
 		{
-			_gameStateMachine = gameStateMachine;
+			_loadSceneService = loadSceneService;
 		}
-		
-		public void Enter()
+
+		public void Enter(SceneLoadPayload sceneLoadPayload)
 		{
-			Debug.Log("Enter LoadSceneState");
-			Debug.LogWarning("Scene loading " + SceneName);
-			SceneManager.LoadScene(SceneName);
-			Debug.LogWarning("Scene loaded " + SceneName);
-			
-			_gameStateMachine.Enter<GameplayState>();
+			_loadSceneService
+				.LoadSceneAsync(sceneLoadPayload)
+				.Forget();
 		}
 
 		public void Exit()
 		{
-			
 		}
 	}
 }

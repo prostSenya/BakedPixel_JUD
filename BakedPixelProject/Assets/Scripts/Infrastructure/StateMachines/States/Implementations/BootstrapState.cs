@@ -6,11 +6,9 @@ namespace Infrastructure.StateMachines.States.Implementations
 	{
 		private readonly IGameStateMachine _gameStateMachine;
 
-		public BootstrapState(IGameStateMachine gameStateMachine)
-		{
+		public BootstrapState(IGameStateMachine gameStateMachine) => 
 			_gameStateMachine = gameStateMachine;
-		}
-		
+
 		public void Enter()
 		{
 			_gameStateMachine.Enter<LoadProgressState>();
