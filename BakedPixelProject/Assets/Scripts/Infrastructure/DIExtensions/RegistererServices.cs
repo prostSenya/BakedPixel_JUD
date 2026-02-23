@@ -1,5 +1,7 @@
 ﻿using Services.LoadSceneServices;
+using Services.ResourceLoaders;
 using Services.SaveLoadServices;
+using Services.StaticDataServices;
 using VContainer;
 
 namespace Infrastructure.DIExtensions
@@ -10,6 +12,8 @@ namespace Infrastructure.DIExtensions
 		{
 			containerBuilder.Register<ISaveLoadService, SaveLoadService>(Lifetime.Singleton);
 			containerBuilder.Register<ILoadSceneService, LoadSceneService>(Lifetime.Singleton);
+			containerBuilder.Register<IResourceLoader, ResourceLoader>(Lifetime.Singleton);
+			containerBuilder.Register<IStaticDataService, StaticDataService>(Lifetime.Singleton);
 			return containerBuilder;
 		}
 	}
