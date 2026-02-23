@@ -8,6 +8,7 @@ namespace Armors
 	{
 		[SerializeField] private ArmorType _armorType;
 		[SerializeField] private float _weight;
+		[SerializeField] private float _defense;
 
 		[Header("Inventory info")]
 		[SerializeField] private InventoryItemData _inventoryItemData;
