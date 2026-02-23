@@ -1,4 +1,5 @@
 using Infrastructure.Initializers;
+using Inventories.Factories;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -9,7 +10,12 @@ namespace Infrastructure.Installers
 	{
 		[SerializeField] private GameplaySceneUIInitializer _gameplaySceneUIInitializer;
 
-		public override void Install(IContainerBuilder builder) => 
+		public override void Install(IContainerBuilder builder)
+		{
 			builder.RegisterComponent(_gameplaySceneUIInitializer).AsImplementedInterfaces();
+
+			builder.Register<IInventoryFactory, InventoryFactory>(Lifetime.Singleton);
+			builder.Register<IInventorySlotFactory, InventorySlotFactory>(Lifetime.Singleton);
+		}
 	}
 }

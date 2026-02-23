@@ -4,7 +4,9 @@ namespace Inventories
 	{
 		Unknown = 0,
 		Weapon = 1,
-		Armor = 2,
+		Torso = 2,
+		Head = 3,
+		Consumables = 4,
 		
 		None = 99
 	}

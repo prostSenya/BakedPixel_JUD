@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Inventories.Configs;
 using Inventories.Domain;
 using Services.StaticDataServices;
-using UI.GameplayMenu.Inventories;
 
 namespace Inventories.Factories
 {
