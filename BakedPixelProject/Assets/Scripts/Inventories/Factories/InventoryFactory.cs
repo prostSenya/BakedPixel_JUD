@@ -21,17 +21,8 @@ namespace Inventories.Factories
 			InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
 			List<InventorySlot> inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
 
-			for (int i = 0; i < inventoryConfig.Capacity; i++)
-			{
-				if (i < inventoryConfig.UnlockSlotCountOnDefault)
-				{
-					inventorySlots.Add( _inventorySlotFactory.Create());
-				}
-				else
-				{
-					inventorySlots.Add( _inventorySlotFactory.Create());
-				}
-			}
+			for (int i = 0; i < inventoryConfig.Capacity; i++) 
+				inventorySlots.Add( _inventorySlotFactory.Create(i >= inventoryConfig.UnlockSlotCountOnDefault));
 			
 			return new Inventory(inventorySlots);
 		}

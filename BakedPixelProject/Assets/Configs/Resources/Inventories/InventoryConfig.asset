@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd0d34282a59f342b9844c42099bd3f, type: 3}
   m_Name: InventoryConfig
   m_EditorClassIdentifier: 
-  _capacity: 124
-  _unlockSlotPrice: 0
-  _unlockSlotCountOnDefault: 124
+  _capacity: 30
+  _unlockSlotCountOnDefault: 15

@@ -5,6 +5,6 @@ namespace Inventories.Factories
 {
 	public interface IInventorySlotFactory
 	{
-		InventorySlot Create();
+		public InventorySlot Create(bool isLocked = false);
 	}
 }

@@ -10,5 +10,7 @@ namespace Inventories.Domain
 		{
 			_inventorySlots = inventorySlots;
 		}
+
+		public int InventorySlotCount => _inventorySlots.Count;
 	}
 }

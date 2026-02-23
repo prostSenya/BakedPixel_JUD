@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Inventories.Configs
 {
-	[CreateAssetMenu(fileName = nameof(InventoryConfig), menuName = "StaticData/Inventories" + nameof(InventoryConfig))]
+	[CreateAssetMenu(fileName = nameof(InventoryConfig), menuName = "StaticData/Inventories/" + nameof(InventoryConfig))]
 	public class InventoryConfig : ScriptableObject
 	{
 		[Min(0)]

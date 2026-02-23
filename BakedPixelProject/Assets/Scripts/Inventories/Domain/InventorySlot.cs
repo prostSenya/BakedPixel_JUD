@@ -2,8 +2,12 @@ namespace Inventories.Domain
 {
 	public class InventorySlot
 	{
-		public InventorySlot(InventoryItemType itemType = InventoryItemType.None)
+		private readonly int _unlockSlotPrice;
+
+		public InventorySlot(bool isLocked, int unlockSlotPrice, InventoryItemType itemType = InventoryItemType.None)
 		{
+			_unlockSlotPrice = unlockSlotPrice;
+			IsLocked = isLocked;
 			ItemType = itemType;
 		}
 

@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 198690637}
   - component: {fileID: 198690636}
   - component: {fileID: 198690635}
+  - component: {fileID: 198690638}
   m_Layer: 5
   m_Name: AddBulletsButton
   m_TagString: Untagged
@@ -586,6 +587,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198690633}
   m_CullTransparentMesh: 1
+--- !u!114 &198690638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198690633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049e44903daf438983ae93dd9f8d80e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 198690635}
 --- !u!1 &349420142
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,8 +659,8 @@ MonoBehaviour:
   m_StartAxis: 0
   m_CellSize: {x: 122, y: 122}
   m_Spacing: {x: 25, y: 25}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Constraint: 1
+  m_ConstraintCount: 5
 --- !u!1 &395745839
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +673,7 @@ GameObject:
   - component: {fileID: 395745843}
   - component: {fileID: 395745842}
   - component: {fileID: 395745841}
+  - component: {fileID: 395745844}
   m_Layer: 5
   m_Name: ShootButton
   m_TagString: Untagged
@@ -768,6 +783,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395745839}
   m_CullTransparentMesh: 1
+--- !u!114 &395745844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395745839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b599f5f8a39d4eb7aee3800af59ec62e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 395745841}
 --- !u!1 &469817843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,6 +1458,7 @@ GameObject:
   - component: {fileID: 865090204}
   - component: {fileID: 865090203}
   - component: {fileID: 865090202}
+  - component: {fileID: 865090205}
   m_Layer: 5
   m_Name: AddCoinsButton
   m_TagString: Untagged
@@ -1539,6 +1568,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865090200}
   m_CullTransparentMesh: 1
+--- !u!114 &865090205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865090200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7784afe715b648619fcf0a5fb7292f78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 865090202}
 --- !u!224 &875055808 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3418113118599996704, guid: a8a13abe7191808459c2a60be2784d60, type: 3}
@@ -2161,6 +2203,7 @@ GameObject:
   - component: {fileID: 1556910980}
   - component: {fileID: 1556910979}
   - component: {fileID: 1556910978}
+  - component: {fileID: 1556910981}
   m_Layer: 5
   m_Name: AddItemButton
   m_TagString: Untagged
@@ -2270,6 +2313,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1556910976}
   m_CullTransparentMesh: 1
+--- !u!114 &1556910981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556910976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ffddb8cd001497eb5468f89aedda969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 1556910978}
 --- !u!1 &1731083931
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2472,7 @@ GameObject:
   - component: {fileID: 1780734059}
   - component: {fileID: 1780734058}
   - component: {fileID: 1780734057}
+  - component: {fileID: 1780734060}
   m_Layer: 5
   m_Name: RemoveItemButton
   m_TagString: Untagged
@@ -2525,6 +2582,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780734055}
   m_CullTransparentMesh: 1
+--- !u!114 &1780734060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780734055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d2cb70f56746b9878a055c1185337e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 1780734057}
 --- !u!1 &1874584997
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,10 +14,10 @@ namespace Inventories.Factories
 			_staticDataService = staticDataService;
 		}
 		
-		public InventorySlot Create()
+		public InventorySlot Create(bool isLocked = false)
 		{
 			InventorySlotConfig inventorySlotConfig = _staticDataService.GetInventorySlotConfig();
-			return new InventorySlot();
+			return new InventorySlot(isLocked, inventorySlotConfig.UnlockSlotPrice, InventoryItemType.Unknown);
 		}
 	}
 }

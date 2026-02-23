@@ -1,8 +1,9 @@
+using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
 namespace Inventories.Configs
 {
-	[CreateAssetMenu(fileName = nameof(InventorySlotConfig), menuName = "StaticData/Inventories" + nameof(InventorySlotConfig))]
+	[CreateAssetMenu(fileName = nameof(InventorySlotConfig), menuName = "StaticData/Inventories/" + nameof(InventorySlotConfig))]
 	public class InventorySlotConfig : ScriptableObject
 	{
 		[Min(0)]
@@ -12,7 +13,10 @@ namespace Inventories.Configs
 		[SerializeField] private Sprite _spriteOnLock;
 		public Sprite SpriteOnLock => _spriteOnLock;
 		
-		[SerializeField] private Sprite _spriteOnUnlock;
-		public Sprite SpriteOnUnlock => _spriteOnUnlock;
+		[SerializeField] private Sprite _spriteOnEmptySlot;
+		public Sprite SpriteOnEmptySlot => _spriteOnEmptySlot;
+		
+		[SerializeField] private InventorySlotView _prefab;
+		public InventorySlotView Prefab => _prefab;
 	}
 }

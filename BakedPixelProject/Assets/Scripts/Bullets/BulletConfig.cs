@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Bullets
 {
-	public class BulletConfig : MonoBehaviour
+	[CreateAssetMenu(fileName = nameof(BulletConfig), menuName = "StaticData/Bullets/" + nameof(BulletConfig))]
+	public class BulletConfig : ScriptableObject
 	{
 		[SerializeField] private BulletType _bulletType;
 		[SerializeField] private float _weight;

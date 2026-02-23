@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Armors
 {
-	[CreateAssetMenu(fileName = nameof(ArmorConfig), menuName = "StaticData/Armors" + nameof(ArmorConfig))]
+	[CreateAssetMenu(fileName = nameof(ArmorConfig), menuName = "StaticData/Armors/" + nameof(ArmorConfig))]
 	public class ArmorConfig : ScriptableObject
 	{
 		[SerializeField] private ArmorType _armorType;
