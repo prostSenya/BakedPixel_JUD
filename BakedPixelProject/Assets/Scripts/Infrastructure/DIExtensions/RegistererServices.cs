@@ -1,4 +1,6 @@
-﻿using Services.LoadSceneServices;
+﻿using Services.JsonConvertServices;
+using Services.LoadSceneServices;
+using Services.PersistentProgressServices;
 using Services.ResourceLoaders;
 using Services.SaveLoadServices;
 using Services.StaticDataServices;
@@ -14,6 +16,10 @@ namespace Infrastructure.DIExtensions
 			containerBuilder.Register<ILoadSceneService, LoadSceneService>(Lifetime.Singleton);
 			containerBuilder.Register<IResourceLoader, ResourceLoader>(Lifetime.Singleton);
 			containerBuilder.Register<IStaticDataService, StaticDataService>(Lifetime.Singleton);
+			containerBuilder.Register<IPersistentProgressService, PersistentProgressService>(Lifetime.Singleton);
+			containerBuilder.Register<IJsonConvertService, JsonConvertService>(Lifetime.Singleton);
+			containerBuilder.Register<IFileProgressStorage, FileProgressStorage>(Lifetime.Singleton);
+			
 			return containerBuilder;
 		}
 	}
