@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 
 namespace Inventories.Domain
 {
@@ -12,5 +14,6 @@ namespace Inventories.Domain
 		}
 
 		public int InventorySlotCount => _inventorySlots.Count;
+		public List<InventorySlot> Slots => _inventorySlots.ToList();
 	}
 }

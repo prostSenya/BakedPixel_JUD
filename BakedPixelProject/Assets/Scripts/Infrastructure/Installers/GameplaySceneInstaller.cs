@@ -16,9 +16,10 @@ namespace Infrastructure.Installers
 
 			builder.Register<IInventoryFactory, InventoryFactory>(Lifetime.Singleton);
 			builder.Register<IInventorySlotFactory, InventorySlotFactory>(Lifetime.Singleton);
+			builder.Register<IInventoryPresenterFactory, InventoryPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IInventorySlotPresenterFactory, InventorySlotPresenterFactory>(Lifetime.Singleton);
+			
 			builder.Register<IInventorySlotViewSpawner, InventorySlotViewSpawner>(Lifetime.Singleton);
-			builder.Register<IInventorySlotViewSpawner, InventorySlotViewSpawner>(Lifetime.Singleton);
-			builder.Register<IInventorySlotContainerProvider, InventorySlotContainerProvider>(Lifetime.Singleton);
 		}
 	}
 }

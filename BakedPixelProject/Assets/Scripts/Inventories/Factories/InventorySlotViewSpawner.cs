@@ -8,20 +8,16 @@ namespace Inventories.Factories
 	public class InventorySlotViewSpawner : IInventorySlotViewSpawner
 	{
 		private readonly IStaticDataService _staticDataService;
-		private readonly IInventorySlotContainerProvider _inventorySlotContainerProvider;
 
-		public InventorySlotViewSpawner(IStaticDataService staticDataService, IInventorySlotContainerProvider inventorySlotContainerProvider)
-		{
+		public InventorySlotViewSpawner(IStaticDataService staticDataService) => 
 			_staticDataService = staticDataService;
-			_inventorySlotContainerProvider = inventorySlotContainerProvider;
-		}
 
 		// TODO InventorySlotView - IInventorySlotView
-		public InventorySlotView Spawn(int count)
+		public InventorySlotView Spawn(Transform parent)
 		{
 			InventorySlotConfig config = _staticDataService.GetInventorySlotConfig();
 
-			return	Object.Instantiate(config.Prefab, _inventorySlotContainerProvider.GetSlotContainer());
+			return	Object.Instantiate(config.Prefab, parent);
 		}
 	}
 }

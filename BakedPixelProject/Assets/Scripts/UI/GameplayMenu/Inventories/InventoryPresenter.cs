@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using Inventories.Domain;
 using Inventories.Factories;
-using Services.StaticDataServices;
+using UnityEngine;
 
 namespace UI.GameplayMenu.Inventories
 {
@@ -8,40 +9,42 @@ namespace UI.GameplayMenu.Inventories
 	{
 		private readonly Inventory _inventory;
 		private readonly InventoryView _inventoryView;
-		private readonly IInventorySlotFactory _inventorySlotFactory;
-		private readonly IInventorySlotViewSpawner _inventoryViewSpawner;
-		private readonly IStaticDataService _staticDataService;
+		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
+		private readonly Transform _inventorySlotsContainer;
+
+		private List<InventorySlotPresenter> _inventorySlotPresenters;
 
 		public InventoryPresenter(
 			Inventory inventory, 
-			InventoryView inventoryView, 
-			IInventorySlotFactory inventorySlotFactory,
-			IInventorySlotViewSpawner inventoryViewSpawner,
-			IStaticDataService staticDataService)
+			InventoryView inventoryView,
+			IInventorySlotPresenterFactory inventorySlotPresenterFactory,
+			Transform inventorySlotsContainer)
 		{
 			_inventory = inventory;
 			_inventoryView = inventoryView;
-			_inventorySlotFactory = inventorySlotFactory;
-			_inventoryViewSpawner = inventoryViewSpawner;
-			_staticDataService = staticDataService;
+			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
+			_inventorySlotsContainer = inventorySlotsContainer;
 		}
-		
+
 		public void Show()
 		{
+			_inventorySlotPresenters = new List<InventorySlotPresenter>(_inventory.InventorySlotCount);
+
 			for (int i = 0; i < _inventory.InventorySlotCount; i++)
 			{
-				InventorySlotPresenter inventorySlotPresenter = new InventorySlotPresenter(
-					_inventorySlotFactory.Create(),
-					_inventoryViewSpawner.Spawn(_inventory.InventorySlotCount),
-					_staticDataService	
-					);
+				InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(_inventory.Slots[i], _inventorySlotsContainer);				
+				inventorySlotPresenter.Show();
+				_inventorySlotPresenters.Add(inventorySlotPresenter);
 			}
-			;
+			
 			//_inventoryView.Show();
 		}
 		
 		public void Hide()
 		{
+			foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
+				inventorySlotPresenter.Hide();
+
 			//_inventoryView.Hide();
 		}
 	}

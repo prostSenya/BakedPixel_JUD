@@ -1,9 +1,10 @@
 ﻿using UI.GameplayMenu.Inventories;
+using UnityEngine;
 
 namespace Inventories.Factories
 {
 	public interface IInventorySlotViewSpawner
 	{
-		InventorySlotView Spawn(int count);
+		InventorySlotView Spawn(Transform parent);
 	}
 }

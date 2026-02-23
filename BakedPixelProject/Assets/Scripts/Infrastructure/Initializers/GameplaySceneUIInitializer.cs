@@ -1,6 +1,4 @@
-﻿using Inventories.Domain;
-using Inventories.Factories;
-using Services.StaticDataServices;
+﻿using Inventories.Factories;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 using VContainer;
@@ -13,38 +11,15 @@ namespace Infrastructure.Initializers
 		[SerializeField] private InventoryView _inventoryView;
 		[SerializeField] private Transform _inventorySlotContainer;
 		
-		private IInventoryFactory _inventoryFactory;
-		private IInventorySlotContainerProvider _inventorySlotContainerProvider;
-		private IInventorySlotFactory _inventorySlotFactory;
-		private IInventorySlotViewSpawner _inventoryViewSpawner;
-		private IStaticDataService _staticDataService;
+		private IInventoryPresenterFactory _inventoryPresenterFactory;
 
 		[Inject]
-		private void Construct(
-			IInventoryFactory inventoryFactory, 
-			IInventorySlotContainerProvider inventorySlotContainerProvider,
-			IInventorySlotFactory inventorySlotFactory,
-			IInventorySlotViewSpawner inventoryViewSpawner,
-			IStaticDataService staticDataService)
-		{
-			_staticDataService = staticDataService;
-			_inventoryFactory = inventoryFactory;
-			_inventorySlotContainerProvider = inventorySlotContainerProvider;
-			_inventorySlotFactory = inventorySlotFactory;
-			_inventoryViewSpawner = inventoryViewSpawner;
-		}
-		
+		private void Construct(IInventoryPresenterFactory inventoryPresenterFactory) => 
+			_inventoryPresenterFactory = inventoryPresenterFactory;
+
 		public void Initialize()
 		{
-			_inventorySlotContainerProvider.SetSlotContainer(_inventorySlotContainer);
-			
-			Inventory inventory = _inventoryFactory.Create();
-			InventoryPresenter inventoryPresenter = new InventoryPresenter(
-				inventory, 
-				_inventoryView, 
-				_inventorySlotFactory, 
-				_inventoryViewSpawner,
-				_staticDataService);
+			InventoryPresenter inventoryPresenter = _inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer);
 			
 			inventoryPresenter.Show();
 		}

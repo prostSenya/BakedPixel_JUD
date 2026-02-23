@@ -15,3 +15,4 @@ MonoBehaviour:
   _unlockPrice: 5
   _spriteOnLock: {fileID: 21300000, guid: 8050a86f572b85646ba722de65a10251, type: 3}
   _spriteOnEmptySlot: {fileID: 21300000, guid: e4b59a671c287904cb70a5e714ac29aa, type: 3}
+  _prefab: {fileID: 3217315077001661447, guid: a8a13abe7191808459c2a60be2784d60, type: 3}
