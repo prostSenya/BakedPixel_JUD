@@ -19,6 +19,7 @@ namespace Services.PersistentProgressServices
 
 		public void Save(string json)
 		{
+			Debug.LogError($"Saving to: {_path}");
 			string tmp = _path + ".tmp";
 			File.WriteAllText(tmp, json);
 

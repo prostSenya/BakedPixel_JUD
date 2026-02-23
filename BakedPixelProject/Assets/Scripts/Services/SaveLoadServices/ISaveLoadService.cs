@@ -4,5 +4,6 @@
 	{
 		void SaveProgress();
 		void LoadProgress();
+		bool HasSavedProgress { get; }
 	}
 }

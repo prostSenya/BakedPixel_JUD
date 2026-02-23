@@ -53,9 +53,14 @@ namespace Services.SaveLoadServices
 		public void LoadProgress()
 		{
 			if (_fileProgressStorage.TryLoad(out string json))
+			{
 				_persistentProgressService.LoadProgress(json);
+			}
 			else
+			{
 				_persistentProgressService.SetDefaultProgress();
+				SaveProgress();
+			}
 
 			UpdateProgressReaders();
 		}

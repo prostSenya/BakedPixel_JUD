@@ -16,6 +16,7 @@ namespace Services.PersistentProgressServices
 
 		public void SetDefaultProgress()
 		{
+			ProjectProgress = new ProjectProgress();
 		}
 	}
 }
