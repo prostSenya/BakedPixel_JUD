@@ -12,5 +12,7 @@ namespace Armors
 
 		[Header("Inventory info")]
 		[SerializeField] private InventoryItemData _inventoryItemData;
+
+		public ArmorType ArmorType => _armorType;
 	}
 }

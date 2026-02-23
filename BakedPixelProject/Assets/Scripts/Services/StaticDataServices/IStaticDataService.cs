@@ -1,4 +1,7 @@
+using Armors;
+using Bullets;
 using Inventories.Configs;
+using Weapons;
 
 namespace Services.StaticDataServices
 {
@@ -7,5 +10,8 @@ namespace Services.StaticDataServices
 		InventoryConfig GetInventoryConfig();
 		void LoadAll();
 		InventorySlotConfig GetInventorySlotConfig();
+		ArmorConfig GetArmorConfig(ArmorType armorType);
+		WeaponConfig GetWeaponConfig(WeaponType weaponType);
+		BulletConfig GetBulletConfig(BulletType bulletType);
 	}
 }

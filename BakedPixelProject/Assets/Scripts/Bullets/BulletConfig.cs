@@ -11,5 +11,7 @@ namespace Bullets
 		
 		[Header("Inventory info")]
 		[SerializeField] private InventoryItemData _inventoryItemData;
+
+		public BulletType BulletType => _bulletType;
 	}
 }

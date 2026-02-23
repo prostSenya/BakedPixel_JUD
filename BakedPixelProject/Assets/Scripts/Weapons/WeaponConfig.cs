@@ -10,7 +10,9 @@ namespace Weapons
 		[SerializeField] private int _damage;
 		[SerializeField] private float _weight;
 
-		[Header("Inventory info")]
-		[SerializeField] private InventoryItemData _inventoryItemData;
+		[Header("Inventory info")] [SerializeField]
+		private InventoryItemData _inventoryItemData;
+		
+		public WeaponType WeaponType => _weaponType;
 	}
 }
