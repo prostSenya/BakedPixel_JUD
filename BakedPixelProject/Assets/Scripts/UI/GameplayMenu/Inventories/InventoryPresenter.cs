@@ -1,3 +1,4 @@
+using Inventories.Domain;
 using UnityEngine;
 
 namespace UI.GameplayMenu.Inventories

@@ -11,11 +11,7 @@ namespace Inventories.Configs
 
 		[Min(0)]
 		[SerializeField] private float _weight;
-
-		[Min(0)]
-		[SerializeField] private int _damage;
-
+		
 		public float Weight => _weight; 
-		public int Damage => _damage;
 	}
 }

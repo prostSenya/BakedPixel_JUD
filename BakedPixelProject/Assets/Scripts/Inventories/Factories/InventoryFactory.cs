@@ -1,5 +1,6 @@
-using System;
+using System.Collections.Generic;
 using Inventories.Configs;
+using Inventories.Domain;
 using Services.StaticDataServices;
 using UI.GameplayMenu.Inventories;
 
@@ -7,24 +8,33 @@ namespace Inventories.Factories
 {
 	public class InventoryFactory : IInventoryFactory
 	{
+		private readonly IInventorySlotFactory _inventorySlotFactory;
 		private readonly IStaticDataService _staticDataService;
 
-		public InventoryFactory(IStaticDataService staticDataService)
+		public InventoryFactory(IStaticDataService staticDataService, IInventorySlotFactory inventorySlotFactory)
 		{
+			_inventorySlotFactory = inventorySlotFactory;
 			_staticDataService = staticDataService;
 		}
 		
 		public Inventory Create()
 		{
 			InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
+			List<InventorySlot> inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
 
-			if (inventoryConfig == null)
-				throw new Exception("дурак");
+			for (int i = 0; i < inventoryConfig.Capacity; i++)
+			{
+				if (i < inventoryConfig.UnlockSlotCountOnDefault)
+				{
+					inventorySlots.Add( _inventorySlotFactory.Create());
+				}
+				else
+				{
+					inventorySlots.Add( _inventorySlotFactory.Create());
+				}
+			}
 			
-			return new Inventory(
-				inventoryConfig.Capacity, 
-				inventoryConfig.UnlockSlotCountOnDefault, 
-				inventoryConfig.UnlockSlotPrice);
+			return new Inventory(inventorySlots);
 		}
 	}
 }

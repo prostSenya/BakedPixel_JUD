@@ -7,10 +7,7 @@ namespace Inventories.Configs
 	{
 		[Min(0)]
 		[SerializeField] private int _capacity;
-
-		[Min(0)]
-		[SerializeField] private int _unlockSlotPrice;
-
+		
 		[Min(0)]
 		[SerializeField] private int _unlockSlotCountOnDefault;
 		
@@ -23,7 +20,6 @@ namespace Inventories.Configs
 #endif
 		
 		public int Capacity => _capacity; 
-		public int UnlockSlotPrice => _unlockSlotPrice;
 		public int UnlockSlotCountOnDefault => _unlockSlotCountOnDefault;
 	}
 }

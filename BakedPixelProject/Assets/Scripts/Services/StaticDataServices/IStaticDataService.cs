@@ -6,5 +6,6 @@ namespace Services.StaticDataServices
 	{
 		InventoryConfig GetInventoryConfig();
 		void LoadAll();
+		InventorySlotConfig GetInventorySlotConfig();
 	}
 }

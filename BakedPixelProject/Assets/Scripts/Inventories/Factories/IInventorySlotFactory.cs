@@ -3,8 +3,8 @@ using UI.GameplayMenu.Inventories;
 
 namespace Inventories.Factories
 {
-	public interface IInventoryFactory
+	public interface IInventorySlotFactory
 	{
-		Inventory Create();
+		InventorySlot Create();
 	}
 }

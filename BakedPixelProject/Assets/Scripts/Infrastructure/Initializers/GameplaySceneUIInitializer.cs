@@ -1,4 +1,5 @@
-﻿using Inventories.Factories;
+﻿using Inventories.Domain;
+using Inventories.Factories;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 using VContainer;
