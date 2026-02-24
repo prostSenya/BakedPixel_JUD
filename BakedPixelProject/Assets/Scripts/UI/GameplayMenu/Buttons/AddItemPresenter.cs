@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Armors;
-using Bullets;
 using Inventories;
 using Inventories.Domain;
 using Inventories.Services;
 using Services.RandomServices;
+using UnityEngine;
 using Weapons;
 
 namespace UI.GameplayMenu.Buttons
@@ -22,8 +21,8 @@ namespace UI.GameplayMenu.Buttons
 		public AddItemPresenter(
 			AddItemButton addItemButton,
 			IInventoryService inventoryService,
-			IRandomService randomService, 
-			InventoryItemType[] inventoryItemTypes, 
+			IRandomService randomService,
+			InventoryItemType[] inventoryItemTypes,
 			ArmorType[] armorTypes,
 			WeaponType[] weaponTypes)
 		{
@@ -33,27 +32,31 @@ namespace UI.GameplayMenu.Buttons
 			_inventoryItemTypes = inventoryItemTypes;
 			_armorTypes = armorTypes;
 			_weaponTypes = weaponTypes;
-
-			
 		}
 
-		public void Show() => 
+		public void Show() =>
 			_addItemButton.Clicked += OnAddItemButtonClicked;
 
-		public void Dispose() => 
+		public void Dispose() =>
 			_addItemButton.Clicked -= OnAddItemButtonClicked;
 
 		private void OnAddItemButtonClicked()
 		{
+			if (_inventoryService.IsFullInventory())
+			{
+				Debug.LogError("Cannot add item: Inventory is full.");
+				return;
+			}
+
 			InventoryItemType inventoryItemType = _randomService.GetRandomElement(_inventoryItemTypes);
-			int enumId = -1;
-			
+			int enumId;
+
 			switch (inventoryItemType)
 			{
 				case InventoryItemType.Weapon:
 					enumId = (int)_randomService.GetRandomElement(_weaponTypes);
 					break;
-				
+
 				case InventoryItemType.Torso:
 					enumId = (int)_randomService.GetRandomElement(_armorTypes);
 					break;
@@ -61,9 +64,13 @@ namespace UI.GameplayMenu.Buttons
 				case InventoryItemType.Head:
 					enumId = (int)_randomService.GetRandomElement(_armorTypes);
 					break;
+				
+				default:
+					throw new ArgumentOutOfRangeException($"Invalid InventoryItemType: {inventoryItemType}");
 			}
-			
-			_inventoryService.TrySetItem(new InventorySlot.ItemKey(inventoryItemType, enumId),1);
+
+			if (_inventoryService.TrySetItem(new ItemKey(inventoryItemType, enumId), 1) == false) 
+				Debug.LogError("Cannot add item: Failed to set item.");
 		}
 	}
 }

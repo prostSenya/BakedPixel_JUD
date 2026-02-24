@@ -19,3 +19,5 @@ MonoBehaviour:
     _description: 
     _itemType: 4
     _sprite: {fileID: 21300000, guid: 8d5612d15bc8076449b173932e4636cc, type: 3}
+  _maxStackCount: 50
+  _isStackable: 1

@@ -1,5 +1,4 @@
 ﻿using Infrastructure.StateMachines.States.Interfaces;
-using UnityEngine;
 
 namespace Infrastructure.StateMachines.States.Implementations
 {
@@ -7,7 +6,6 @@ namespace Infrastructure.StateMachines.States.Implementations
 	{
 		public void Enter()
 		{
-			Debug.Log("Entering GameplayState");
 		}
 
 		public void Exit()

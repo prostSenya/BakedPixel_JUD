@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Inventories.Domain;
 using Inventories.Factories;
 using Inventories.Services;
 using UnityEngine;
@@ -29,20 +28,23 @@ namespace UI.GameplayMenu.Inventories
 
 		public void Show()
 		{
-			// _inventorySlotPresenters = new List<InventorySlotPresenter>(_inventoryService.SlotCount);
-			//
-			// for (int i = 0; i < _inventoryService.SlotCount; i++)
-			// {
-			// 	InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(inventory.Slots[i], _inventorySlotsContainer);				
-			// 	inventorySlotPresenter.Show();
-			// 	_inventorySlotPresenters.Add(inventorySlotPresenter);
-			// }
+			_inventorySlotPresenters = new List<InventorySlotPresenter>(_inventoryService.SlotCount);
+
+			for (int i = 0; i < _inventoryService.SlotCount; i++)
+			{
+				InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(
+					_inventoryService.Slots[i], 
+					_inventorySlotsContainer);				
+				
+				inventorySlotPresenter.Show();
+				_inventorySlotPresenters.Add(inventorySlotPresenter);
+			}
 		}
 		
 		public void Hide()
 		{
-			// foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
-			// 	inventorySlotPresenter.Hide();
+			foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
+			 	inventorySlotPresenter.Hide();
 		}
 	}
 }

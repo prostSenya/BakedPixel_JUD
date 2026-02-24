@@ -6,6 +6,6 @@ namespace Inventories.Factories
 {
 	public interface IInventorySlotPresenterFactory
 	{
-		InventorySlotPresenter Create(InventorySlot inventorySlot,Transform slotsParent);
+		InventorySlotPresenter Create(IReadOnlyInventorySlot inventorySlot,Transform slotsParent);
 	}
 }

@@ -18,5 +18,6 @@ namespace Weapons
 		public int Damage => _damage;
 		public WeaponType WeaponType => _weaponType;
 		public BulletType UniqueBulletType => _uniqueBulletType;
+		public InventoryItemData InventoryItemData => _inventoryItemData;
 	}
 }

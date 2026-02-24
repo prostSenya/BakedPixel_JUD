@@ -27,8 +27,14 @@ namespace Inventories.Services
 		}
 
 		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
-
-		public bool TrySetItem(InventorySlot.ItemKey itemKey, int count)
+		public int SlotCount => _inventorySlots.Count;
+		public IReadOnlyList<IReadOnlyInventorySlot> Slots => _inventorySlots;
+		public bool IsFullInventory() =>
+			_inventorySlots
+			.Where(inventorySlot => inventorySlot.IsLocked == false)
+			.All(inventorySlot => inventorySlot.HasItem);
+		
+		public bool TrySetStackableItem(ItemKey itemKey, int count)
 		{
 			if (count <= 0)
 				return false;
@@ -60,31 +66,37 @@ namespace Inventories.Services
 						
 					int stackableCount = Math.Min(count, freeCount);
 					slot.Set(itemKey, stackableCount);
-
+			
 					count -= stackableCount;
-
+			
 					if (count <= 0)
 						return true;
 				}
 			}
+
+			return TrySetItem(itemKey, count);
+		}
+
+		public bool TrySetItem(ItemKey itemKey, int count = 1)
+		{
+			if (count <= 0)
+				return  false;
 			
 			foreach (InventorySlot slot in _inventorySlots)
 			{
 				if (slot.IsLocked || slot.HasItem)
 					continue;
-				
-				int countToAdd = Math.Min(maxStackableCount, count);
-				
-				slot.Set(itemKey, countToAdd);
-				count -= countToAdd;
+
+				slot.Set(itemKey, 1);
+				count --;
 				
 				if (count <= 0)
 					return true;
 			}
 
 			return false;
-		}
 
+		}
 		public bool TryGetWeaponByBullet(BulletType bulletType, out WeaponType weaponType)
 		{
 			weaponType = default;
@@ -114,8 +126,9 @@ namespace Inventories.Services
 		public void RemoveBullet(BulletType bulletType)
 		{
 			InventorySlot bulletSlot = _inventorySlots
-				.FirstOrDefault(inventorySlot =>
-					inventorySlot.HasItem &&
+				.FirstOrDefault(
+					inventorySlot =>
+					inventorySlot.HasItem && 
 					inventorySlot.Key.Type == InventoryItemType.Consumables &&
 					EnumHelper.TryParse((int)bulletType, out BulletType _));
 

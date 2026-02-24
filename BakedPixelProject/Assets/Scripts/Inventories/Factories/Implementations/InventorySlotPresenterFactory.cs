@@ -18,7 +18,7 @@ namespace Inventories.Factories
 			_staticDataService = staticDataService;
 		}
 
-		public InventorySlotPresenter Create(InventorySlot inventorySlot, Transform slotsParent)
+		public InventorySlotPresenter Create(IReadOnlyInventorySlot inventorySlot, Transform slotsParent)
 		{
 			InventorySlotView inventorySlotView = _inventoryViewSpawner.Spawn(slotsParent);
 

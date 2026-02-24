@@ -35,7 +35,7 @@ namespace UI.GameplayMenu.Buttons
 		{
 			foreach (BulletType bulletType in _bulletTypes)
 			{
-				if (_inventoryService.TrySetItem(new InventorySlot.ItemKey(InventoryItemType.Consumables, (int)bulletType), bulletCount) == false)
+				if (_inventoryService.TrySetStackableItem(new ItemKey(InventoryItemType.Consumables, (int)bulletType), bulletCount) == false)
 					Debug.LogError($"{bulletType} could not be added");
 			}
 		}

@@ -4,6 +4,7 @@ using Inventories.Domain;
 using Inventories.Services;
 using Services.RandomServices;
 using Services.StaticDataServices;
+using UnityEngine;
 
 namespace Inventories.Factories
 {

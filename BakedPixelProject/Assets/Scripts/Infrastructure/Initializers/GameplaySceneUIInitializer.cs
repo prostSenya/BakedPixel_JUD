@@ -30,6 +30,8 @@ namespace Infrastructure.Initializers
 		private IWalletService _walletService;
 		private IRandomService _randomService;
 		private IWeaponService _weaponService;
+		
+		private InventoryPresenter _inventoryPresenter;
 
 		[Inject]
 		private void Construct(
@@ -48,15 +50,20 @@ namespace Infrastructure.Initializers
 
 		public void Initialize()
 		{
-			InventoryPresenter inventoryPresenter = _inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer);
+			_inventoryPresenter = _inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer);
 			
 			AddBulletsPresenter addBulletsPresenter = new AddBulletsPresenter(_inventoryService, _addBulletsButton, EnumHelper.GetBulletTypes());
+			addBulletsPresenter.Show();
 			
 			AddCoinPresenter addCoinPresenter = new AddCoinPresenter(_addCoinsButton, _walletService);
+			addCoinPresenter.Show();
 			
 			InventoryItemType[] inventoryItemTypes = Enum.GetValues(typeof(InventoryItemType))
 				.Cast<InventoryItemType>()
-				.Where(type => type != InventoryItemType.Unknown && type != InventoryItemType.Consumables)
+				.Where(type => 
+					type != InventoryItemType.Unknown &&
+					type != InventoryItemType.Consumables &&
+					type != InventoryItemType.None)
 				.ToArray();
 
 			AddItemPresenter addItemPresenter = new AddItemPresenter(
@@ -66,8 +73,10 @@ namespace Infrastructure.Initializers
 				inventoryItemTypes,
 				EnumHelper.GetArmorTypes(),
 				EnumHelper.GetWeaponTypes());
-
+			addItemPresenter.Show();
+			
 			RemoveItemPresenter removeItemPresenter = new RemoveItemPresenter(_removeItemButton, _inventoryService);
+			removeItemPresenter.Show();
 			
 			ShootPresenter shootPresenter = new ShootPresenter(
 				_shootButton, 
@@ -75,8 +84,14 @@ namespace Infrastructure.Initializers
 				_weaponService,
 				_randomService,
 				EnumHelper.GetBulletTypes());
-			
-			inventoryPresenter.Show();
+			shootPresenter.Show();
+
+			_inventoryPresenter.Show();
+		}
+
+		private void OnDestroy()
+		{
+			_inventoryPresenter.Hide();
 		}
 	}
 }
