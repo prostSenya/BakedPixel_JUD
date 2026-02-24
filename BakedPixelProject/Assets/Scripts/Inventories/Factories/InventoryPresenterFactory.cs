@@ -1,5 +1,4 @@
-using Inventories.Domain;
-using Services.StaticDataServices;
+using Inventories.Services;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
@@ -7,20 +6,16 @@ namespace Inventories.Factories
 {
 	public class InventoryPresenterFactory : IInventoryPresenterFactory
 	{
-		private readonly IInventoryFactory _inventoryFactory;
+		private readonly IInventoryService _inventoryService;
 		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
 
-		public InventoryPresenterFactory(IInventoryFactory inventoryFactory, IInventorySlotPresenterFactory inventorySlotPresenterFactory)
+		public InventoryPresenterFactory(IInventoryService inventoryService, IInventorySlotPresenterFactory inventorySlotPresenterFactory)
 		{
-			_inventoryFactory = inventoryFactory;
+			_inventoryService = inventoryService;
 			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
 		}
 
-		public InventoryPresenter Create(InventoryView inventoryView, Transform inventorySlotsContainer)
-		{
-			Inventory inventory = _inventoryFactory.Create();
-
-			return new InventoryPresenter(inventory, inventoryView, _inventorySlotPresenterFactory, inventorySlotsContainer);
-		}
+		public InventoryPresenter Create(InventoryView inventoryView, Transform inventorySlotsContainer) => 
+			new InventoryPresenter(_inventoryService, inventoryView, _inventorySlotPresenterFactory, inventorySlotsContainer);
 	}
 }

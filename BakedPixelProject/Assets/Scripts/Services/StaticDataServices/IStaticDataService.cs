@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Armors;
 using Bullets;
 using Inventories.Configs;
@@ -12,6 +13,7 @@ namespace Services.StaticDataServices
 		InventorySlotConfig GetInventorySlotConfig();
 		ArmorConfig GetArmorConfig(ArmorType armorType);
 		WeaponConfig GetWeaponConfig(WeaponType weaponType);
+		public List<WeaponConfig> GetWeaponConfig(BulletType bulletType);
 		BulletConfig GetBulletConfig(BulletType bulletType);
 	}
 }

@@ -24,6 +24,7 @@ namespace Services.StaticDataServices
 		private Dictionary<ArmorType, ArmorConfig> _armorConfigs;
 		private Dictionary<WeaponType, WeaponConfig> _weaponConfigs;
 		private Dictionary<BulletType, BulletConfig> _bulletConfigs;
+		private Dictionary<BulletType, List<WeaponConfig>> _weaponsByBulletType;
 
 		public StaticDataService(IResourceLoader resourceLoader) => 
 			_resourceLoader = resourceLoader;
@@ -53,13 +54,21 @@ namespace Services.StaticDataServices
 				? config 
 				: throw new ArgumentException($"No config found for {weaponType} in {nameof(StaticDataService)}");
 
+		public List<WeaponConfig> GetWeaponConfig(BulletType bulletType) =>
+			_weaponsByBulletType.TryGetValue(bulletType, out var config) 
+				? config 
+				: throw new ArgumentException($"No config found for {bulletType} in {nameof(StaticDataService)}");
+
 		public BulletConfig GetBulletConfig(BulletType bulletType)
 		{
 			return _bulletConfigs.TryGetValue(bulletType, out var config) 
 				? config 
 				: throw new ArgumentException($"No config found for {bulletType} in {nameof(StaticDataService)}");
 		}
-		
+
+		public List<BulletConfig> GetAllBulletConfigs() => 
+			_bulletConfigs.Values.ToList();
+
 		private void LoadArmorConfigs()
 		{
 			_armorConfigs = (_resourceLoader.LoadAll<ArmorConfig>(ArmorConfigPath)
@@ -70,10 +79,14 @@ namespace Services.StaticDataServices
 		
 		private void LoadWeaponConfigs()
 		{
-			_weaponConfigs = (_resourceLoader.LoadAll<WeaponConfig>(WeaponConfigPath)
+			var weaponConfigs = (_resourceLoader.LoadAll<WeaponConfig>(WeaponConfigPath)
 			                  ?? 
-			                  throw new ArgumentException($"Failed to load {nameof(WeaponConfig)} at path: {WeaponConfigPath}"))
-				.ToDictionary(x => x.WeaponType, x => x);
+			                  throw new ArgumentException($"Failed to load {nameof(WeaponConfig)} at path: {WeaponConfigPath}"));
+
+			_weaponConfigs = weaponConfigs.ToDictionary(x => x.WeaponType, x => x);
+			_weaponsByBulletType = weaponConfigs
+				.GroupBy(x => x.UniqueBulletType)
+				.ToDictionary(g => g.Key, g => g.ToList());
 		}
 		
 		private void LoadBulletConfigs()

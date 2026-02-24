@@ -7,8 +7,8 @@ namespace UI.GameplayMenu.Buttons
 	public class AddBulletsButton : MonoBehaviour
 	{
 		[SerializeField] private Button _button;
-		
-		public event Action Clicked;
+		[SerializeField] private int _bulletsToAdd;
+		public event Action<int> Clicked;
 		
 		private void OnEnable() => 
 			_button.onClick.AddListener(OnAddBullets);
@@ -17,6 +17,6 @@ namespace UI.GameplayMenu.Buttons
 			_button.onClick.RemoveListener(OnAddBullets);
 
 		private void OnAddBullets() => 
-			Clicked?.Invoke();
+			Clicked?.Invoke(_bulletsToAdd);
 	}
 }

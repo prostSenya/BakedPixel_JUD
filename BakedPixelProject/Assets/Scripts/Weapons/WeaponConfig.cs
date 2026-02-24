@@ -1,4 +1,5 @@
-﻿using Inventories.Configs;
+﻿using Bullets;
+using Inventories.Configs;
 using UnityEngine;
 
 namespace Weapons
@@ -7,12 +8,15 @@ namespace Weapons
 	public class WeaponConfig : ScriptableObject
 	{
 		[SerializeField] private WeaponType _weaponType;
+		[SerializeField] private BulletType _uniqueBulletType;
 		[SerializeField] private int _damage;
 		[SerializeField] private float _weight;
 
 		[Header("Inventory info")] [SerializeField]
 		private InventoryItemData _inventoryItemData;
-		
+
+		public int Damage => _damage;
 		public WeaponType WeaponType => _weaponType;
+		public BulletType UniqueBulletType => _uniqueBulletType;
 	}
 }

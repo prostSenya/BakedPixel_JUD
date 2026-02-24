@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using Inventories.Domain;
 using Inventories.Factories;
+using Inventories.Services;
 using UnityEngine;
 
 namespace UI.GameplayMenu.Inventories
 {
 	public class InventoryPresenter
 	{
-		private readonly Inventory _inventory;
+		private readonly IInventoryService _inventoryService;
 		private readonly InventoryView _inventoryView;
 		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
 		private readonly Transform _inventorySlotsContainer;
@@ -15,12 +16,12 @@ namespace UI.GameplayMenu.Inventories
 		private List<InventorySlotPresenter> _inventorySlotPresenters;
 
 		public InventoryPresenter(
-			Inventory inventory, 
+			IInventoryService inventoryService, 
 			InventoryView inventoryView,
 			IInventorySlotPresenterFactory inventorySlotPresenterFactory,
 			Transform inventorySlotsContainer)
 		{
-			_inventory = inventory;
+			_inventoryService = inventoryService;
 			_inventoryView = inventoryView;
 			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
 			_inventorySlotsContainer = inventorySlotsContainer;
@@ -28,11 +29,12 @@ namespace UI.GameplayMenu.Inventories
 
 		public void Show()
 		{
-			_inventorySlotPresenters = new List<InventorySlotPresenter>(_inventory.InventorySlotCount);
+			 Inventory inventory = _inventoryService.Inventory;
+			_inventorySlotPresenters = new List<InventorySlotPresenter>(inventory.InventorySlotCount);
 
-			for (int i = 0; i < _inventory.InventorySlotCount; i++)
+			for (int i = 0; i < inventory.InventorySlotCount; i++)
 			{
-				InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(_inventory.Slots[i], _inventorySlotsContainer);				
+				InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(inventory.Slots[i], _inventorySlotsContainer);				
 				inventorySlotPresenter.Show();
 				_inventorySlotPresenters.Add(inventorySlotPresenter);
 			}

@@ -2,6 +2,6 @@
 {
 	public interface IRandomService
 	{
-		
+		T GetRandomElement<T>(T[] array);
 	}
 }

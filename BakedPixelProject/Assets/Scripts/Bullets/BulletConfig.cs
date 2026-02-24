@@ -11,7 +11,12 @@ namespace Bullets
 		
 		[Header("Inventory info")]
 		[SerializeField] private InventoryItemData _inventoryItemData;
-
+		[SerializeField] private int _maxStackCount;
+		[SerializeField] private bool _isStackable;
+		
+		public InventoryItemData InventoryItemData => _inventoryItemData;
+		public int MaxStackCount => _maxStackCount;
+		public bool IsStackable => _isStackable;
 		public BulletType BulletType => _bulletType;
 	}
 }
