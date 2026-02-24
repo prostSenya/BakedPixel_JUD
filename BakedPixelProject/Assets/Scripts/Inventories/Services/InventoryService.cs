@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Armors;
 using Bullets;
 using Helpers;
 using Inventories.Domain;
+using Services.RandomServices;
 using Services.StaticDataServices;
-using Unity.VisualScripting;
 using Weapons;
 
 namespace Inventories.Services
 {
 	public class InventoryService : IInventoryService
 	{
+		private readonly List<InventorySlot> _inventorySlots;
 		private readonly IStaticDataService _staticDataService;
+		private readonly IRandomService _randomService;
 
-		public InventoryService(Inventory inventory, IStaticDataService staticDataService)
+		public InventoryService(
+			List<InventorySlot> inventorySlots, 
+			IStaticDataService staticDataService,
+			IRandomService randomService)
 		{
+			_inventorySlots = inventorySlots;
 			_staticDataService = staticDataService;
-			Inventory = inventory;
+			_randomService = randomService;
 		}
 
-		public Inventory Inventory { get; }
-
-		public bool TryUnlockSlot(int slotIndex)
-		{
-			throw new System.NotImplementedException();
-		}
+		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
 
 		public bool TrySetItem(InventorySlot.ItemKey itemKey, int count)
 		{
@@ -45,7 +45,7 @@ namespace Inventories.Services
 
 			if (isStackable)
 			{
-				foreach (InventorySlot slot in Inventory.Slots)
+				foreach (InventorySlot slot in _inventorySlots)
 				{
 					if (slot.IsLocked)
 						continue;
@@ -68,7 +68,7 @@ namespace Inventories.Services
 				}
 			}
 			
-			foreach (InventorySlot slot in Inventory.Slots)
+			foreach (InventorySlot slot in _inventorySlots)
 			{
 				if (slot.IsLocked || slot.HasItem)
 					continue;
@@ -84,22 +84,12 @@ namespace Inventories.Services
 
 			return false;
 		}
-		
-		public bool TryClearItem(int slotIndex)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public bool HaveWeaponTypes(IEnumerable<WeaponType> weaponTypes)
-		{
-			throw new System.NotImplementedException();
-		}
 
 		public bool TryGetWeaponByBullet(BulletType bulletType, out WeaponType weaponType)
 		{
 			weaponType = default;
 
-			foreach (InventorySlot slot in Inventory.Slots)
+			foreach (InventorySlot slot in _inventorySlots)
 			{
 				if (slot.HasItem == false)
 					continue;
@@ -123,10 +113,10 @@ namespace Inventories.Services
 
 		public void RemoveBullet(BulletType bulletType)
 		{
-			InventorySlot bulletSlot = Inventory.Slots
-				.FirstOrDefault(s =>
-					s.HasItem &&
-					s.Key.Type == InventoryItemType.Consumables &&
+			InventorySlot bulletSlot = _inventorySlots
+				.FirstOrDefault(inventorySlot =>
+					inventorySlot.HasItem &&
+					inventorySlot.Key.Type == InventoryItemType.Consumables &&
 					EnumHelper.TryParse((int)bulletType, out BulletType _));
 
 			if (bulletSlot == null)
@@ -134,5 +124,8 @@ namespace Inventories.Services
 			
 			bulletSlot.RemoveCount(1);
 		}
+
+		public InventorySlot GetRandomSlot() => 
+			_randomService.GetRandomElement(_inventorySlots);
 	}
 }

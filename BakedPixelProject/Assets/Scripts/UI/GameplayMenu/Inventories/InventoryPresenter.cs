@@ -29,25 +29,20 @@ namespace UI.GameplayMenu.Inventories
 
 		public void Show()
 		{
-			 Inventory inventory = _inventoryService.Inventory;
-			_inventorySlotPresenters = new List<InventorySlotPresenter>(inventory.InventorySlotCount);
-
-			for (int i = 0; i < inventory.InventorySlotCount; i++)
-			{
-				InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(inventory.Slots[i], _inventorySlotsContainer);				
-				inventorySlotPresenter.Show();
-				_inventorySlotPresenters.Add(inventorySlotPresenter);
-			}
-			
-			//_inventoryView.Show();
+			// _inventorySlotPresenters = new List<InventorySlotPresenter>(_inventoryService.SlotCount);
+			//
+			// for (int i = 0; i < _inventoryService.SlotCount; i++)
+			// {
+			// 	InventorySlotPresenter inventorySlotPresenter = _inventorySlotPresenterFactory.Create(inventory.Slots[i], _inventorySlotsContainer);				
+			// 	inventorySlotPresenter.Show();
+			// 	_inventorySlotPresenters.Add(inventorySlotPresenter);
+			// }
 		}
 		
 		public void Hide()
 		{
-			foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
-				inventorySlotPresenter.Hide();
-
-			//_inventoryView.Hide();
+			// foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
+			// 	inventorySlotPresenter.Hide();
 		}
 	}
 }

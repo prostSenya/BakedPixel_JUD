@@ -40,7 +40,13 @@ namespace Inventories.Domain
 		
 		public void Unlock() =>
 			IsLocked = false;
-		
+
+		public void Clear()
+		{
+			Key = new ItemKey(InventoryItemType.None, -1);
+			Count = 0;
+		}
+
 		public readonly struct ItemKey : IEquatable<ItemKey>
 		{
 			public ItemKey(InventoryItemType type, int enumId)
