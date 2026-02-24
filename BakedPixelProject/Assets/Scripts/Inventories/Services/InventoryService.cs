@@ -6,6 +6,7 @@ using Helpers;
 using Inventories.Domain;
 using Services.RandomServices;
 using Services.StaticDataServices;
+using UnityEngine;
 using Weapons;
 
 namespace Inventories.Services
@@ -63,18 +64,31 @@ namespace Inventories.Services
 					
 					if (freeCount <= 0)
 						continue;
-						
-					int stackableCount = Math.Min(count, freeCount);
-					slot.Set(itemKey, stackableCount);
-			
-					count -= stackableCount;
-			
+					
+					int toAdd = Math.Min(freeCount, count);
+					slot.Set(itemKey, slot.Count + toAdd);
+					count -= toAdd;
+					
 					if (count <= 0)
 						return true;
 				}
 			}
+			
+			foreach (InventorySlot slot in _inventorySlots)
+			{
+				if (slot.IsLocked || slot.HasItem)
+					continue;
 
-			return TrySetItem(itemKey, count);
+				int countToAdd = Math.Min(maxStackableCount, count);
+				
+				slot.Set(itemKey, countToAdd);
+				count -= countToAdd;
+				
+				if (count <= 0)
+					return true;
+			}
+
+			return false;
 		}
 
 		public bool TrySetItem(ItemKey itemKey, int count = 1)
@@ -88,7 +102,7 @@ namespace Inventories.Services
 					continue;
 
 				slot.Set(itemKey, 1);
-				count --;
+				count--;
 				
 				if (count <= 0)
 					return true;

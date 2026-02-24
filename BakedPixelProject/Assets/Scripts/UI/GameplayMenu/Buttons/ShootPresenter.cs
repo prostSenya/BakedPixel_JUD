@@ -49,7 +49,7 @@ namespace UI.GameplayMenu.Buttons
 			}
 			else
 			{
-				Debug.LogError($"Cannt shoot. No weapon available for bullet type: {randomBulletType}");
+				Debug.LogError($"Cant shoot. No weapon available for bullet type: {randomBulletType}");
 			}
 		}
 	}
