@@ -9,16 +9,13 @@ namespace Inventories.Factories
 {
 	public class InventoryServiceFactory : IInventoryServiceFactory
 	{
-		private readonly IInventorySlotFactory _inventorySlotFactory;
 		private readonly IRandomService _randomService;
 		private readonly IStaticDataService _staticDataService;
 
 		public InventoryServiceFactory(
 			IStaticDataService staticDataService, 
-			IInventorySlotFactory inventorySlotFactory,
 			IRandomService randomService)
 		{
-			_inventorySlotFactory = inventorySlotFactory;
 			_randomService = randomService;
 			_staticDataService = staticDataService;
 		}
@@ -29,7 +26,7 @@ namespace Inventories.Factories
 			List<InventorySlot> inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
 
 			for (int i = 0; i < inventoryConfig.Capacity; i++) 
-				inventorySlots.Add( _inventorySlotFactory.Create(i,i >= inventoryConfig.UnlockSlotCountOnDefault));
+				inventorySlots.Add(new InventorySlot(i,i >= inventoryConfig.UnlockSlotCountOnDefault));
 			
 			return new InventoryService(inventorySlots, _staticDataService, _randomService);
 		}

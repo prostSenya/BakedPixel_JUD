@@ -34,10 +34,7 @@ namespace UI.GameplayMenu.Buttons
 			_armorTypes = armorTypes;
 			_weaponTypes = weaponTypes;
 
-			// _inventoryItemTypes = Enum.GetValues(typeof(InventoryItemType))
-			// 	.Cast<InventoryItemType>()
-			// 	.Where(type => type != InventoryItemType.Unknown && type != InventoryItemType.Consumables)
-			// 	.ToArray();
+			
 		}
 
 		public void Show() => 
