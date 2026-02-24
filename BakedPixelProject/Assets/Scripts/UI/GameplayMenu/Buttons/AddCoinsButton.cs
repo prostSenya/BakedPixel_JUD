@@ -7,8 +7,9 @@ namespace UI.GameplayMenu.Buttons
 	public class AddCoinsButton : MonoBehaviour
 	{
 		[SerializeField] private Button _button;
+		[SerializeField] private int _amount;
 		
-		public event Action Clicked;
+		public event Action<int> Clicked;
 		
 		private void OnEnable() => 
 			_button.onClick.AddListener(OnAddCoins);
@@ -17,6 +18,6 @@ namespace UI.GameplayMenu.Buttons
 			_button.onClick.RemoveListener(OnAddCoins);
 
 		private void OnAddCoins() => 
-			Clicked?.Invoke();
+			Clicked?.Invoke(_amount);
 	}
 }
