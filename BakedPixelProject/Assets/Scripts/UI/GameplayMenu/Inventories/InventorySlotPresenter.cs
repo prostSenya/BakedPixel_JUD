@@ -66,7 +66,7 @@ namespace UI.GameplayMenu.Inventories
 						throw new Exception("Failed to parse armor type from inventory slot ID.");
 					return _staticDataService.GetArmorConfig(armorType).InventoryItemData.Sprite;
 
-				case InventoryItemType.Consumables:
+				case InventoryItemType.Ammo:
 					if (EnumHelper.TryParse(_inventorySlot.Key.EnumId, out BulletType bulletType) == false)
 						throw new Exception("Failed to parse bullet type from inventory slot ID.");
 					return _staticDataService.GetBulletConfig(bulletType).InventoryItemData.Sprite;

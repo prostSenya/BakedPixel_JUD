@@ -6,7 +6,6 @@ using Helpers;
 using Inventories.Domain;
 using Services.RandomServices;
 using Services.StaticDataServices;
-using UnityEngine;
 using Weapons;
 
 namespace Inventories.Services
@@ -111,9 +110,13 @@ namespace Inventories.Services
 			return false;
 
 		}
+
+		public void ClearSlot(IReadOnlyInventorySlot slot) => 
+			_inventorySlots[slot.Id]?.Clear();
+
 		public bool TryGetWeaponByBullet(BulletType bulletType, out WeaponType weaponType)
 		{
-			weaponType = default;
+			weaponType = WeaponType.Unknown;
 
 			foreach (InventorySlot slot in _inventorySlots)
 			{
@@ -143,7 +146,7 @@ namespace Inventories.Services
 				.FirstOrDefault(
 					inventorySlot =>
 					inventorySlot.HasItem && 
-					inventorySlot.Key.Type == InventoryItemType.Consumables &&
+					inventorySlot.Key.Type == InventoryItemType.Ammo &&
 					EnumHelper.TryParse((int)bulletType, out BulletType _));
 
 			if (bulletSlot == null)
@@ -152,7 +155,7 @@ namespace Inventories.Services
 			bulletSlot.RemoveCount(1);
 		}
 
-		public InventorySlot GetRandomSlot() => 
+		public IReadOnlyInventorySlot GetRandomSlot() => 
 			_randomService.GetRandomElement(_inventorySlots);
 	}
 }

@@ -6,7 +6,7 @@ namespace Inventories
 		Weapon = 1,
 		Torso = 2,
 		Head = 3,
-		Consumables = 4,
+		Ammo = 4,
 		
 		None = 99
 	}

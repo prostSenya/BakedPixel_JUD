@@ -38,9 +38,11 @@ namespace Inventories.Domain
 
 			if (Count <= 0)
 			{
-				Key = default;
+				Key = ItemKey.CreateEmptyItem();
 				Count = 0;
 			}
+			
+			Updated?.Invoke();
 		}
 		
 		public void Unlock() =>

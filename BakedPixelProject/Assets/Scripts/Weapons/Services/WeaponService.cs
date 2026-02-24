@@ -18,7 +18,7 @@ namespace Weapons.Services
 			BulletConfig bulletConfig = _staticDataService.GetBulletConfig(bulletType);
 			WeaponConfig weaponConfig = _staticDataService.GetWeaponConfig(weaponType);
 			
-			Debug.Log($"Shoted from {weaponConfig.name}, with {bulletConfig.name}, damage: {weaponConfig.Damage}");
+			Debug.Log($"Shoted from {weaponConfig.InventoryItemData.Name}, with {bulletConfig.InventoryItemData.Name}, damage: {weaponConfig.Damage}");
 		}
 	}
 }

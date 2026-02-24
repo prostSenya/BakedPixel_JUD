@@ -30,7 +30,7 @@ namespace UI.GameplayMenu.Buttons
 		{
 			bool isEmptySlot = true;
 
-			InventorySlot slot = null;
+			IReadOnlyInventorySlot slot = null;
 
 			if (_inventoryService.IsEmptyInventory)
 			{
@@ -43,8 +43,8 @@ namespace UI.GameplayMenu.Buttons
 				slot = _inventoryService.GetRandomSlot();
 				isEmptySlot = slot.HasItem == false;
 			}
-
-			slot.Clear();
+			
+			_inventoryService.ClearSlot(slot);
 		}
 	}
 }

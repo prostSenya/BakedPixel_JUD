@@ -14,7 +14,8 @@ namespace Inventories.Services
 		bool TrySetStackableItem(ItemKey itemKey, int count);
 		bool TryGetWeaponByBullet(BulletType randomBulletType, out WeaponType weaponType);
 		void RemoveBullet(BulletType randomBulletType);
-		InventorySlot GetRandomSlot();
+		IReadOnlyInventorySlot GetRandomSlot();
 		bool TrySetItem(ItemKey itemKey, int count = 1);
+		void ClearSlot(IReadOnlyInventorySlot slot);
 	}
 }

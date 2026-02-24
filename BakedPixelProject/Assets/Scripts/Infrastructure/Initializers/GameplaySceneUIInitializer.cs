@@ -62,7 +62,7 @@ namespace Infrastructure.Initializers
 				.Cast<InventoryItemType>()
 				.Where(type => 
 					type != InventoryItemType.Unknown &&
-					type != InventoryItemType.Consumables &&
+					type != InventoryItemType.Ammo &&
 					type != InventoryItemType.None)
 				.ToArray();
 

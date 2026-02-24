@@ -47,7 +47,7 @@ namespace UI.GameplayMenu.Buttons
 				_inventoryService.RemoveBullet(randomBulletType);
 				_weaponService.Shoot(randomBulletType, weaponType);
 			}
-			else
+			else if(weaponType == WeaponType.Unknown)
 			{
 				Debug.LogError($"Cant shoot. No weapon available for bullet type: {randomBulletType}");
 			}
