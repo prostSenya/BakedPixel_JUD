@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Armors;
 using Bullets;
 using Inventories.Configs;
+using UI.SaveViewMenu;
 using Weapons;
 
 namespace Services.StaticDataServices
@@ -17,5 +18,6 @@ namespace Services.StaticDataServices
 		WeaponConfig GetWeaponConfig(WeaponType weaponType);
 		public List<WeaponConfig> GetWeaponConfig(BulletType bulletType);
 		BulletConfig GetBulletConfig(BulletType bulletType);
+		SaveLoaderView GetSaveLoaderView();
 	}
 }

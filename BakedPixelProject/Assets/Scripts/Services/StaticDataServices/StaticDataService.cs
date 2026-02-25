@@ -5,6 +5,7 @@ using Armors;
 using Bullets;
 using Inventories.Configs;
 using Services.ResourceLoaders;
+using UI.SaveViewMenu;
 using Weapons;
 
 namespace Services.StaticDataServices
@@ -16,6 +17,7 @@ namespace Services.StaticDataServices
 		private const string ArmorConfigPath = "Armors";
 		private const string WeaponConfigPath = "Weapons";
 		private const string BulletConfigPath = "Bullets";
+		private const string SaveViewPath = "UI/SaveLoaderViewPrefab";
 
 		private readonly IResourceLoader _resourceLoader;
 
@@ -27,7 +29,8 @@ namespace Services.StaticDataServices
 		private Dictionary<BulletType, List<WeaponConfig>> _weaponsByBulletType;
 		private List<ArmorConfig> _torsoArmorConfigs;
 		private List<ArmorConfig> _headArmorConfigs;
-
+		private SaveLoaderView _saveLoaderViewPrefab;
+		
 		public StaticDataService(IResourceLoader resourceLoader) =>
 			_resourceLoader = resourceLoader;
 
@@ -38,8 +41,9 @@ namespace Services.StaticDataServices
 			LoadArmorConfigs();
 			LoadWeaponConfigs();
 			LoadBulletConfigs();
+			LoadSaveLoaderViewPrefab();
 		}
-
+		
 		public InventoryConfig GetInventoryConfig() =>
 			_inventoryConfig;
 
@@ -73,6 +77,9 @@ namespace Services.StaticDataServices
 				? config
 				: throw new ArgumentException($"No config found for {bulletType} in {nameof(StaticDataService)}");
 		}
+
+		public SaveLoaderView GetSaveLoaderView() => 
+			_saveLoaderViewPrefab;
 
 		public List<BulletConfig> GetAllBulletConfigs() =>
 			_bulletConfigs.Values.ToList();
@@ -130,6 +137,13 @@ namespace Services.StaticDataServices
 			                       ??
 			                       throw new ArgumentException(
 				                       $"Failed to load {nameof(InventorySlotConfig)} at path: {InventorySlotConfigPath}");
+		}
+		
+		private void LoadSaveLoaderViewPrefab()
+		{
+			_saveLoaderViewPrefab = _resourceLoader.Load<SaveLoaderView>(SaveViewPath) 
+			                        ?? 
+			                        throw new ArgumentException("Failed to load SaveLoaderView prefab at path: " + SaveViewPath);
 		}
 	}
 }

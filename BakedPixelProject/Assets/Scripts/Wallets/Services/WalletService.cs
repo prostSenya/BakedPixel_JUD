@@ -4,6 +4,9 @@ namespace Wallets.Services
 {
 	public class WalletService : IWalletService
 	{
+		public WalletService(int money) => 
+			Money = money;
+
 		public event Action<int> MoneyCountChanged;
 
 		public int Money { get; private set; }
@@ -12,6 +15,7 @@ namespace Wallets.Services
 		{
 			if (amount <= 0)
 				return;
+			
 			Money += amount;
 			MoneyCountChanged?.Invoke(Money);
 		}

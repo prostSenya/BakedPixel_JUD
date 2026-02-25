@@ -15,8 +15,6 @@ namespace Inventories.Services
 {
 	public class InventoryService : IInventoryService
 	{
-		private const float BaseInventoryWeight = -1f;
-		
 		private readonly List<InventorySlot> _inventorySlots;
 		private readonly IStaticDataService _staticDataService;
 		private readonly IRandomService _randomService;
@@ -29,39 +27,18 @@ namespace Inventories.Services
 			IStaticDataService staticDataService,
 			IRandomService randomService,
 			IWalletService walletService,
-			float inventoryWeight = BaseInventoryWeight)
+			float inventoryWeight)
 		{
 			_inventorySlots = inventorySlots;
 			_staticDataService = staticDataService;
 			_randomService = randomService;
 			_walletService = walletService;
-			_inventoryWeight = inventoryWeight;
+			_inventoryWeight = Mathf.Max(0, inventoryWeight);
 		}
 
 		public event Action<float> InventaryWeightChanged;
 
-		public float InventoryWeight
-		{
-			get { return _inventoryWeight; }
-			private set
-			{
-				if (Mathf.Approximately(_inventoryWeight, value))
-					return;
-
-				if (_inventoryWeight <= BaseInventoryWeight)
-				{
-					_inventoryWeight = _inventorySlots
-						.Where(inventorySlot => inventorySlot.IsLocked == false)
-						.Sum(inventorySlot => inventorySlot.Weight);
-				}
-				else
-				{
-					_inventoryWeight = value;
-				}
-
-				InventaryWeightChanged?.Invoke(_inventoryWeight);
-			}
-		}
+		public float InventoryWeight => _inventoryWeight;
 
 		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
 		public int SlotCount => _inventorySlots.Count;
@@ -93,9 +70,15 @@ namespace Inventories.Services
 			{
 				foreach (InventorySlot slot in _inventorySlots)
 				{
+					if (count <= 0)
+						return true;
+
 					if (slot.IsLocked)
 						continue;
 
+					if (slot.HasItem == false)
+						continue;
+					
 					if (slot.Key.Equals(itemKey) == false)
 						continue;
 
@@ -105,30 +88,32 @@ namespace Inventories.Services
 						continue;
 
 					int toAdd = Math.Min(freeCount, count);
-					slot.Set(itemKey, slot.Amount + toAdd, weight);
+
+					UpdateInventorySlotWeight(slot, () =>
+					{
+						slot.Set(itemKey, slot.Amount + toAdd, weight);
+					});
+					
 					count -= toAdd;
-
-					InventoryWeight += weight;
-
-					if (count <= 0)
-						return true;
 				}
 			}
 
 			foreach (InventorySlot slot in _inventorySlots)
 			{
+				if (count <= 0)
+					return true;
+
 				if (slot.IsLocked || slot.HasItem)
 					continue;
 
 				int countToAdd = Math.Min(maxStackableCount, count);
 
-				slot.Set(itemKey, countToAdd, weight);
+				UpdateInventorySlotWeight(slot, () =>
+				{
+					slot.Set(itemKey, countToAdd, weight);
+				});
+				
 				count -= countToAdd;
-
-				InventoryWeight += weight;
-
-				if (count <= 0)
-					return true;
 			}
 
 			return false;
@@ -139,7 +124,7 @@ namespace Inventories.Services
 			if (count <= 0)
 				return false;
 
-			if (itemKey.Type == InventoryItemType.Unknown)
+			if (itemKey.Type == InventoryItemType.Unknown || itemKey.Type == InventoryItemType.Empty)
 				return false;
 
 			float weight;
@@ -164,10 +149,12 @@ namespace Inventories.Services
 				if (slot.IsLocked || slot.HasItem)
 					continue;
 
-				slot.Set(itemKey, 1, weight);
+				UpdateInventorySlotWeight(slot, () =>
+				{
+					slot.Set(itemKey, 1, weight);
+				});
+				
 				count--;
-
-				InventoryWeight += weight;
 
 				if (count <= 0)
 					return true;
@@ -181,8 +168,7 @@ namespace Inventories.Services
 			InventorySlot inventorySlot = _inventorySlots[slot.Id] ??
 			                              throw new NullReferenceException($"InventorySlot {slot} not found");
 
-			InventoryWeight -= inventorySlot.Weight;
-			inventorySlot.Clear();
+			UpdateInventorySlotWeight(inventorySlot, inventorySlot.Clear);
 		}
 
 		public bool TryUnlockSlot(IReadOnlyInventorySlot slot)
@@ -243,13 +229,24 @@ namespace Inventories.Services
 			if (bulletSlot == null)
 				return;
 
-			float inventoryWeight = _staticDataService.GetBulletConfig(bulletType).Weight;
-
-			InventoryWeight -= inventoryWeight;
-			bulletSlot.RemoveCount(1);
+			UpdateInventorySlotWeight(bulletSlot, () => bulletSlot.RemoveCount(1));
 		}
 
 		public IReadOnlyInventorySlot GetRandomSlot() =>
 			_randomService.GetRandomElement(_inventorySlots);
+		
+		private void UpdateInventorySlotWeight(InventorySlot slot, Action changeSlot)
+		{
+			float oldWeight = slot.TotalWeight;
+			changeSlot?.Invoke();
+			float newWeight = slot.TotalWeight;
+			float delta = newWeight - oldWeight;
+			
+			if (Mathf.Approximately(delta, 0f))
+				return;
+			
+			_inventoryWeight = Mathf.Max(0f, _inventoryWeight + delta);
+			InventaryWeightChanged?.Invoke(_inventoryWeight);
+		}
 	}
 }

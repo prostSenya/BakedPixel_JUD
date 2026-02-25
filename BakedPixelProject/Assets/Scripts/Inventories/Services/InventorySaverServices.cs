@@ -18,7 +18,11 @@ namespace Inventories.Services
 
 		public void WriteProgress(ProjectProgress projectProgress)
 		{
+			if (projectProgress.Inventory == null) 
+				projectProgress.Inventory = new Inventory();
+			
 			projectProgress.Inventory.Slots = new List<Slot>(_inventoryService.Slots.Count);
+			projectProgress.Inventory.Weight = _inventoryService.InventoryWeight;
 			
 			foreach (IReadOnlyInventorySlot slot in _inventoryService.Slots)
 			{

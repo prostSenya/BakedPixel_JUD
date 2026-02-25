@@ -10,9 +10,7 @@ namespace Services.PersistentProgressServices
 		public Inventory Inventory;
 
 		public ProjectProgress()
-		{
-			Inventory = new Inventory();
-		}
+		{ }
 	}
 
 	[Serializable]
@@ -20,6 +18,7 @@ namespace Services.PersistentProgressServices
 	{
 		public List<Slot> Slots;
 		public int Money;
+		public float Weight;
 	}
 	
 	[Serializable]

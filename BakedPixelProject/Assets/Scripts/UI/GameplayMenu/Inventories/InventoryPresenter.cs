@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Infrastructure.StateMachines;
 using Infrastructure.StateMachines.States.Implementations;
-using Inventories.Domain;
 using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.PersistentProgressServices;
@@ -54,8 +53,9 @@ namespace UI.GameplayMenu.Inventories
 			
 			_walletService.MoneyCountChanged += ChangeCoinText;
 			_inventoryView.SaveButtonClicked += SaveProgress; 
-			_inventoryView.SetCoinsText(_walletService.Money.ToString());
 			_inventoryService.InventaryWeightChanged += ChangeWeightText;
+			_inventoryView.SetCoinsText(_walletService.Money.ToString());
+			_inventoryView.SetInventoryWeightText(_inventoryService.InventoryWeight.ToString("F1"));
 		}
 
 		private void SaveProgress() => 

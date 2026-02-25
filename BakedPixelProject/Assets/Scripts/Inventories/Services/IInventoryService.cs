@@ -11,6 +11,7 @@ namespace Inventories.Services
 		bool IsEmptyInventory { get; }
 		int SlotCount { get; }
 		IReadOnlyList<IReadOnlyInventorySlot> Slots { get; }
+		float InventoryWeight { get; }
 		public bool IsFullInventory();
 		bool TrySetStackableItem(ItemKey itemKey, int count);
 		bool TryGetWeaponByBullet(BulletType randomBulletType, out WeaponType weaponType);

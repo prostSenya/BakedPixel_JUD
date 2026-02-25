@@ -1,4 +1,5 @@
 ﻿using Services.PersistentProgressServices;
+using UnityEngine;
 
 namespace Wallets.Services
 {
@@ -10,9 +11,14 @@ namespace Wallets.Services
 			_walletService = walletService;
 
 		public void ReadProgress(ProjectProgress projectProgress)
-		{ }
+		{
+		}
 
-		public void WriteProgress(ProjectProgress projectProgress) => 
+		public void WriteProgress(ProjectProgress projectProgress)
+		{
+			Debug.Log("WalletSaverService: Writing progress...");
+
 			projectProgress.Inventory.Money = _walletService.Money;
+		}
 	}
 }

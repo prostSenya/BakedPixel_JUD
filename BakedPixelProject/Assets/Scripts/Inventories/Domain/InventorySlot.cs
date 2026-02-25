@@ -12,7 +12,8 @@ namespace Inventories.Domain
 			Key = ItemKey.CreateEmptyItem();
 		}
 
-		public float Weight { get; private set; }
+		public float ItemWeight { get; private set; }
+		public float TotalWeight => ItemWeight * Amount;
 		public int Id { get; }
 		public int Amount { get; private set; }
 		public ItemKey Key { get; private set; }
@@ -25,7 +26,7 @@ namespace Inventories.Domain
 		public event Action Cleared;
 		public void Set(ItemKey key, int count, float weight)
 		{
-			Weight = weight;
+			ItemWeight = weight;
 			Key = key; 
 			Amount = count;
 			Debug.Log($"InventorySlot {Id} set to {key.Type} (ID: {key.EnumItemId}) with count {count}");
