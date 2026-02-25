@@ -18,5 +18,6 @@ namespace Bullets
 		public int MaxStackCount => _maxStackCount;
 		public bool IsStackable => _isStackable;
 		public BulletType BulletType => _bulletType;
+		public float Weight => _weight;
 	}
 }

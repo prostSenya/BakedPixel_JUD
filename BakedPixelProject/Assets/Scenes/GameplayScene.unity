@@ -2208,6 +2208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e2f9df47c1d4334aeddd43aeb4abe30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inventoryWeightText: {fileID: 1314206226}
+  _coinsText: {fileID: 1731083933}
 --- !u!1 &1556910976
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Bullets;
 using Inventories.Domain;
@@ -18,5 +19,7 @@ namespace Inventories.Services
 		bool TrySetItem(ItemKey itemKey, int count = 1);
 		void ClearSlot(IReadOnlyInventorySlot slot);
 		bool TryUnlockSlot(IReadOnlyInventorySlot inventorySlot);
+		event Action<float> InventaryWeightChanged;
+		float GetInventoryWeight();
 	}
 }

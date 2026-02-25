@@ -15,5 +15,6 @@ namespace Armors
 
 		public ArmorType ArmorType => _armorType;
 		public InventoryItemData InventoryItemData => _inventoryItemData;
+		public float Weight => _weight;
 	}
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using UnityEngine;
+using Wallets.Services;
 
 namespace UI.GameplayMenu.Inventories
 {
@@ -11,6 +12,7 @@ namespace UI.GameplayMenu.Inventories
 		private readonly InventoryView _inventoryView;
 		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
 		private readonly Transform _inventorySlotsContainer;
+		private readonly IWalletService _walletService;
 
 		private List<InventorySlotPresenter> _inventorySlotPresenters;
 
@@ -18,12 +20,14 @@ namespace UI.GameplayMenu.Inventories
 			IInventoryService inventoryService, 
 			InventoryView inventoryView,
 			IInventorySlotPresenterFactory inventorySlotPresenterFactory,
-			Transform inventorySlotsContainer)
+			Transform inventorySlotsContainer,
+			IWalletService walletService)
 		{
 			_inventoryService = inventoryService;
 			_inventoryView = inventoryView;
 			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
 			_inventorySlotsContainer = inventorySlotsContainer;
+			_walletService = walletService;
 		}
 
 		public void Show()
@@ -39,12 +43,24 @@ namespace UI.GameplayMenu.Inventories
 				inventorySlotPresenter.Show();
 				_inventorySlotPresenters.Add(inventorySlotPresenter);
 			}
+			
+			_walletService.MoneyCountChanged += ChangeCoinText;
+			_inventoryView.SetCoinsText(_walletService.Money.ToString());
+			_inventoryService.InventaryWeightChanged += ChangeWeightText;
 		}
-		
+
+		private void ChangeWeightText(float weight) => 
+			_inventoryView.SetInventoryWeightText(weight.ToString("F1"));
+
 		public void Hide()
 		{
+			_walletService.MoneyCountChanged -= ChangeCoinText;
+
 			foreach (InventorySlotPresenter inventorySlotPresenter in _inventorySlotPresenters) 
 			 	inventorySlotPresenter.Hide();
 		}
+
+		private void ChangeCoinText(int walletMoney) => 
+			_inventoryView.SetCoinsText(walletMoney.ToString());
 	}
 }

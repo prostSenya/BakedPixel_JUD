@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Armors;
 using Bullets;
 using Helpers;
 using Inventories.Domain;
 using Services.RandomServices;
 using Services.StaticDataServices;
+using UnityEngine;
 using Wallets.Services;
 using Weapons;
 
@@ -18,8 +20,10 @@ namespace Inventories.Services
 		private readonly IRandomService _randomService;
 		private readonly IWalletService _walletService;
 
+		private float _inventoryWeight = -1f;
+
 		public InventoryService(
-			List<InventorySlot> inventorySlots, 
+			List<InventorySlot> inventorySlots,
 			IStaticDataService staticDataService,
 			IRandomService randomService,
 			IWalletService walletService)
@@ -30,28 +34,45 @@ namespace Inventories.Services
 			_walletService = walletService;
 		}
 
+		public event Action<float> InventaryWeightChanged;
+
+		public float GetInventoryWeight()
+		{
+			if (Mathf.Approximately(_inventoryWeight, -1f))
+			{
+				_inventoryWeight = _inventorySlots
+					.Where(inventorySlot => inventorySlot.IsLocked == false)
+					.Sum(inventorySlot => inventorySlot.Weight);
+			}
+
+			return _inventoryWeight;
+		}
+
 		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
 		public int SlotCount => _inventorySlots.Count;
 		public IReadOnlyList<IReadOnlyInventorySlot> Slots => _inventorySlots;
+
 		public bool IsFullInventory() =>
 			_inventorySlots
-			.Where(inventorySlot => inventorySlot.IsLocked == false)
-			.All(inventorySlot => inventorySlot.HasItem);
-		
+				.Where(inventorySlot => inventorySlot.IsLocked == false)
+				.All(inventorySlot => inventorySlot.HasItem);
+
 		public bool TrySetStackableItem(ItemKey itemKey, int count)
 		{
 			if (count <= 0)
 				return false;
 
-			bool isStackable = false;
-			int maxStackableCount = 1;
-			
-			if (EnumHelper.TryParse(itemKey.EnumId, out BulletType bulletType))
-			{
-				BulletConfig bulletConfig = _staticDataService.GetBulletConfig(bulletType);
-				isStackable = bulletConfig.IsStackable;
-				maxStackableCount = bulletConfig.MaxStackCount;
-			};
+			bool isStackable;
+			int maxStackableCount;
+			float weight;
+
+			if (EnumHelper.TryParse(itemKey.EnumId, out BulletType bulletType) == false)
+				throw new Exception("Invalid item key enum id: " + itemKey.EnumId);
+
+			BulletConfig bulletConfig = _staticDataService.GetBulletConfig(bulletType);
+			isStackable = bulletConfig.IsStackable;
+			maxStackableCount = bulletConfig.MaxStackCount;
+			weight = bulletConfig.Weight;
 
 			if (isStackable)
 			{
@@ -59,34 +80,40 @@ namespace Inventories.Services
 				{
 					if (slot.IsLocked)
 						continue;
-					
+
 					if (slot.Key.Equals(itemKey) == false)
 						continue;
-					
+
 					int freeCount = maxStackableCount - slot.Count;
-					
+
 					if (freeCount <= 0)
 						continue;
-					
+
 					int toAdd = Math.Min(freeCount, count);
-					slot.Set(itemKey, slot.Count + toAdd);
+					slot.Set(itemKey, slot.Count + toAdd, weight);
 					count -= toAdd;
-					
+
+					_inventoryWeight += weight;
+
+					InventaryWeightChanged?.Invoke(_inventoryWeight);
 					if (count <= 0)
 						return true;
 				}
 			}
-			
+
 			foreach (InventorySlot slot in _inventorySlots)
 			{
 				if (slot.IsLocked || slot.HasItem)
 					continue;
 
 				int countToAdd = Math.Min(maxStackableCount, count);
-				
-				slot.Set(itemKey, countToAdd);
+
+				slot.Set(itemKey, countToAdd, weight);
 				count -= countToAdd;
-				
+				_inventoryWeight += weight;
+
+				InventaryWeightChanged?.Invoke(_inventoryWeight);
+
 				if (count <= 0)
 					return true;
 			}
@@ -97,30 +124,54 @@ namespace Inventories.Services
 		public bool TrySetItem(ItemKey itemKey, int count = 1)
 		{
 			if (count <= 0)
-				return  false;
-			
+				return false;
+
+			if (itemKey.Type == InventoryItemType.Unknown)
+				return false;
+
+			float weight;
+
+			if (itemKey.Type == InventoryItemType.Torso || itemKey.Type == InventoryItemType.Head)
+			{
+				ArmorConfig armorConfig = _staticDataService.GetArmorConfig((ArmorType)itemKey.EnumId);
+				weight = armorConfig.Weight;
+			}
+			else if (itemKey.Type == InventoryItemType.Weapon)
+			{
+				WeaponConfig weaponConfig = _staticDataService.GetWeaponConfig((WeaponType)itemKey.EnumId);
+				weight = weaponConfig.Weight;
+			}
+			else
+			{
+				throw new Exception("Invalid item key enum id: " + itemKey.EnumId);
+			}
+
 			foreach (InventorySlot slot in _inventorySlots)
 			{
 				if (slot.IsLocked || slot.HasItem)
 					continue;
 
-				slot.Set(itemKey, 1);
+				slot.Set(itemKey, 1, weight);
 				count--;
-				
+
+				InventaryWeightChanged?.Invoke(_inventoryWeight);
+
 				if (count <= 0)
 					return true;
 			}
 
 			return false;
-
 		}
 
 		public void ClearSlot(IReadOnlyInventorySlot slot)
 		{
-			InventorySlot inventorySlot = _inventorySlots[slot.Id] ?? throw new NullReferenceException($"InventorySlot {slot} not found");
-			inventorySlot.Clear();
-		}
+			InventorySlot inventorySlot = _inventorySlots[slot.Id] ??
+			                              throw new NullReferenceException($"InventorySlot {slot} not found");
 
+			_inventoryWeight -= inventorySlot.Weight;
+			inventorySlot.Clear();
+			InventaryWeightChanged?.Invoke(_inventoryWeight);
+		}
 
 		public bool TryUnlockSlot(IReadOnlyInventorySlot slot)
 		{
@@ -128,18 +179,18 @@ namespace Inventories.Services
 
 			if (inventorySlot == null)
 				return false;
-			
+
 			if (inventorySlot.IsLocked == false)
 				return false;
 
 			int unlockSlotPrice = _staticDataService.GetInventorySlotConfig().UnlockSlotPrice;
 
-			if(unlockSlotPrice > _walletService.Money)
+			if (unlockSlotPrice > _walletService.Money)
 				return false;
-			
+
 			inventorySlot.Unlock();
 			_walletService.DecreaseMoney(unlockSlotPrice);
-			
+
 			return true;
 		}
 
@@ -172,19 +223,22 @@ namespace Inventories.Services
 		public void RemoveBullet(BulletType bulletType)
 		{
 			InventorySlot bulletSlot = _inventorySlots
-				.FirstOrDefault(
-					inventorySlot =>
-					inventorySlot.HasItem && 
+				.FirstOrDefault(inventorySlot =>
+					inventorySlot.HasItem &&
 					inventorySlot.Key.Type == InventoryItemType.Ammo &&
 					EnumHelper.TryParse((int)bulletType, out BulletType _));
 
 			if (bulletSlot == null)
 				return;
-			
+
+			float inventoryWeight = _staticDataService.GetBulletConfig(bulletType).Weight;
+
+			_inventoryWeight -= inventoryWeight;
 			bulletSlot.RemoveCount(1);
+			InventaryWeightChanged?.Invoke(_inventoryWeight);
 		}
 
-		public IReadOnlyInventorySlot GetRandomSlot() => 
+		public IReadOnlyInventorySlot GetRandomSlot() =>
 			_randomService.GetRandomElement(_inventorySlots);
 	}
 }
