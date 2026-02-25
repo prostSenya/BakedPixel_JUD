@@ -1,8 +1,12 @@
-# 🧩 Unity Inventory Test Project
+# 🧩 Unity Inventory 
 
 > Clean architecture--oriented Unity test project\
 > Focused on scalability, maintainability, and proper separation of
 > concerns.
+
+------------------------------------------------------------------------
+
+<img width="488" height="871" alt="image" src="https://github.com/user-attachments/assets/e9088e1d-3cd5-4491-b8b1-4993b7614306" />
 
 ------------------------------------------------------------------------
 
@@ -78,7 +82,4 @@ Transitions to gameplay scene via state machine
 -   VContainer\
 -   UniTask
 -   ScriptableObject
-
-------------------------------------------------------------------------
-<img width="477" height="868" alt="image" src="https://github.com/user-attachments/assets/e60fc6aa-4036-4d02-9fa0-bf72dfc95afa" />
 
