@@ -1,4 +1,5 @@
-﻿using Services.JsonConvertServices;
+﻿using Services.GameplayServices;
+using Services.JsonConvertServices;
 using Services.LoadSceneServices;
 using Services.PersistentProgressServices;
 using Services.RandomServices;
@@ -23,6 +24,8 @@ namespace Infrastructure.DIExtensions
 			containerBuilder.Register<IFileProgressStorage, FileProgressStorage>(Lifetime.Singleton);
 			containerBuilder.Register<IRandomService, RandomService>(Lifetime.Singleton);
 			containerBuilder.Register<IWeaponService, WeaponService>(Lifetime.Singleton);
+			
+			containerBuilder.Register<GameplaySaverService>(Lifetime.Singleton).AsImplementedInterfaces();
 			
 			return containerBuilder;
 		}

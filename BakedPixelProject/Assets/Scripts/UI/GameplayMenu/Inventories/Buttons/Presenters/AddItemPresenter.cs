@@ -6,10 +6,11 @@ using Inventories.Domain;
 using Inventories.Services;
 using Services.RandomServices;
 using Services.StaticDataServices;
+using UI.GameplayMenu.Inventories.Buttons.Views;
 using UnityEngine;
 using Weapons;
 
-namespace UI.GameplayMenu.Buttons
+namespace UI.GameplayMenu.Inventories.Buttons.Presenters
 {
 	public class AddItemPresenter : IDisposable
 	{

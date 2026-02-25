@@ -26,6 +26,10 @@ namespace Infrastructure.DIExtensions
 				.AsImplementedInterfaces()
 				.AsSelf();
 			
+			builder.Register<SaveProgressState>(Lifetime.Singleton)
+				.AsImplementedInterfaces()
+				.AsSelf();
+			
 			return builder;
 		}
 	}

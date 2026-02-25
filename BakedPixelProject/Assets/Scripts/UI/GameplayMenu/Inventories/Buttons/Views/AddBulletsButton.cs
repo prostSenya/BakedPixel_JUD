@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.GameplayMenu.Buttons
+namespace UI.GameplayMenu.Inventories.Buttons.Views
 {
 	public class AddBulletsButton : MonoBehaviour
 	{

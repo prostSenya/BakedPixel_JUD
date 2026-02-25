@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Linq;
 using Bullets;
-using Helpers;
 using Inventories.Services;
 using Services.RandomServices;
+using UI.GameplayMenu.Inventories.Buttons.Views;
 using UnityEngine;
 using Weapons;
 using Weapons.Services;
 
-namespace UI.GameplayMenu.Buttons
+namespace UI.GameplayMenu.Inventories.Buttons
 {
 	public class ShootPresenter : IDisposable
 	{

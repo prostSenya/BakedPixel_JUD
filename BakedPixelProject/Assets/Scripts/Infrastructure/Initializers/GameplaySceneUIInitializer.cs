@@ -7,8 +7,10 @@ using Inventories.Services;
 using Services.RandomServices;
 using Services.SaveLoadServices;
 using Services.StaticDataServices;
-using UI.GameplayMenu.Buttons;
 using UI.GameplayMenu.Inventories;
+using UI.GameplayMenu.Inventories.Buttons;
+using UI.GameplayMenu.Inventories.Buttons.Presenters;
+using UI.GameplayMenu.Inventories.Buttons.Views;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -33,7 +35,6 @@ namespace Infrastructure.Initializers
 		private IRandomService _randomService;
 		private IWeaponService _weaponService;
 		private InventoryPresenter _inventoryPresenter;
-		private ISaveLoadService _saveLoadService;
 		private IStaticDataService _staticDataService;
 
 		[Inject]
@@ -43,11 +44,9 @@ namespace Infrastructure.Initializers
 			IWalletService walletService,
 			IRandomService randomService,
 			IWeaponService weaponService,
-			ISaveLoadService saveLoadService,
 			IStaticDataService staticDataService)
 		{
 			_staticDataService = staticDataService;
-			_saveLoadService = saveLoadService;
 			_weaponService = weaponService;
 			_randomService = randomService;
 			_walletService = walletService;
@@ -58,7 +57,6 @@ namespace Infrastructure.Initializers
 		public void Initialize()
 		{
 			_inventoryPresenter = _inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer);
-			_saveLoadService.RegisterProgressReader(_inventoryPresenter);
 			
 			AddBulletsPresenter addBulletsPresenter = new AddBulletsPresenter(_inventoryService, _addBulletsButton, EnumHelper.GetBulletTypes());
 			addBulletsPresenter.Show();
@@ -99,8 +97,6 @@ namespace Infrastructure.Initializers
 
 		private void OnDestroy()
 		{
-			_saveLoadService.UnregisterProgressReader(_inventoryPresenter);
-
 			_inventoryPresenter.Hide();
 		}
 	}

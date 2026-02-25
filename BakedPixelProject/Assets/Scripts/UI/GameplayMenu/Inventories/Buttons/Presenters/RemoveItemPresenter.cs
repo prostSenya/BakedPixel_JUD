@@ -1,9 +1,10 @@
 ﻿using System;
 using Inventories.Domain;
 using Inventories.Services;
+using UI.GameplayMenu.Inventories.Buttons.Views;
 using UnityEngine;
 
-namespace UI.GameplayMenu.Buttons
+namespace UI.GameplayMenu.Inventories.Buttons.Presenters
 {
 	public class RemoveItemPresenter : IDisposable
 	{

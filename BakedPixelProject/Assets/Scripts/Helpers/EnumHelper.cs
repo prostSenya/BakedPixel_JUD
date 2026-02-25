@@ -20,12 +20,6 @@ namespace Helpers
 			result = default;
 			return false;
 		}
-
-		public static ArmorType[] GetArmorTypes() =>
-			Enum.GetValues(typeof(ArmorType))
-				.Cast<ArmorType>()
-				.Where(type => type != ArmorType.Unknown)
-				.ToArray();
 		
 		public static BulletType[] GetBulletTypes() =>
 			Enum.GetValues(typeof(BulletType))

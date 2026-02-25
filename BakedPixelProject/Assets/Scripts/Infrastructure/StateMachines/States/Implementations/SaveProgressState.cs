@@ -1,24 +1,23 @@
 using Infrastructure.StateMachines.States.Interfaces;
-using Services.LoadSceneServices;
-using Services.SaveLoadServices;
-using UnityEngine.SceneManagement;
+using Services.GameplayServices;
 
 namespace Infrastructure.StateMachines.States.Implementations
 {
 	public class SaveProgressState : IState
 	{
 		private readonly IGameStateMachine _gameStateMachine;
-		private readonly ISaveLoadService _saveLoadService;
-	
-		public SaveProgressState(IGameStateMachine gameStateMachine, ISaveLoadService saveLoadService)
+		private readonly IGameplaySaverService _gameplaySaverService;
+
+		public SaveProgressState(IGameStateMachine gameStateMachine, IGameplaySaverService gameplaySaverService)
 		{
 			_gameStateMachine = gameStateMachine;
-			_saveLoadService = saveLoadService;
+			_gameplaySaverService = gameplaySaverService;
 		}
 		
 		public void Enter()
 		{
-			_saveLoadService.SaveProgress();
+			_gameplaySaverService.Save();
+			_gameStateMachine.Enter<GameplayState>();
 		}
 	
 		public void Exit()

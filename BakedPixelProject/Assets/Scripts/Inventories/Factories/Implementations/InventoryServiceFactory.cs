@@ -9,53 +9,55 @@ using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.PersistentProgressServices;
 using Services.RandomServices;
-using Services.SaveLoadServices;
 using Services.StaticDataServices;
 using Wallets.Services;
 using Weapons;
 
 namespace Inventories.Factories.Implementations
 {
-	public class InventoryServiceFactory : IInventoryServiceFactory, IProgressReader
+	public class InventoryServiceFactory : IInventoryServiceFactory
 	{
 		private readonly IRandomService _randomService;
 		private readonly IWalletService _walletService;
-		private readonly ISaveLoadService _saveLoadService;
+		private readonly IPersistentProgressService _persistentProgressService;
 		private readonly IStaticDataService _staticDataService;
-		private List<InventorySlot> _inventorySlots;
 
 		public InventoryServiceFactory(
 			IStaticDataService staticDataService,
 			IRandomService randomService,
 			IWalletService walletService,
-			ISaveLoadService saveLoadService)
+			IPersistentProgressService persistentProgressService)
 		{
 			_randomService = randomService;
 			_walletService = walletService;
-			_saveLoadService = saveLoadService;
+			_persistentProgressService = persistentProgressService;
 			_staticDataService = staticDataService;
 		}
 
 		public IInventoryService Create()
 		{
-			if (_saveLoadService.HasSavedProgress == false)
+			List<InventorySlot> inventorySlots;
+
+			if (_persistentProgressService.ProjectProgress.Inventory == null)
 			{
+				inventorySlots = ReadProgress(_persistentProgressService.ProjectProgress);
+			}
+			else
+			{
+				InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
+				inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
+
+				for (int i = 0; i < inventoryConfig.Capacity; i++)
+					inventorySlots.Add(new InventorySlot(i, i >= inventoryConfig.UnlockSlotCountOnDefault));
 			}
 			
-			InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
-			_inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
-
-			for (int i = 0; i < inventoryConfig.Capacity; i++)
-				_inventorySlots.Add(new InventorySlot(i, i >= inventoryConfig.UnlockSlotCountOnDefault));
-
-
-			return new InventoryService(_inventorySlots, _staticDataService, _randomService, _walletService);
+			return new InventoryService(inventorySlots, _staticDataService, _randomService, _walletService);
 		}
 
-		public void ReadProgress(ProjectProgress projectProgress)
+		private List<InventorySlot> ReadProgress(ProjectProgress projectProgress)
 		{
 			List<Slot> inventorySlots = projectProgress.Inventory.Slots;
-			_inventorySlots = new List<InventorySlot>(inventorySlots.Count);
+			List<InventorySlot> inventorySlotsToResult = new List<InventorySlot>(inventorySlots.Count);
 
 			for (int i = 0; i < inventorySlots.Count; i++)
 			{
@@ -78,8 +80,10 @@ namespace Inventories.Factories.Implementations
 						inventorySlots[i].ItemKey.EnumItemId),
 						inventorySlots[i].Amount,weight);
 
-				_inventorySlots.Add(inventorySlot);
+				inventorySlotsToResult.Add(inventorySlot);
 			}
+
+			return inventorySlotsToResult;
 		}
 
 		private float GetItemWeight(Slot slot)

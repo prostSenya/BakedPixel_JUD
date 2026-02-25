@@ -1,0 +1,18 @@
+﻿using Services.PersistentProgressServices;
+
+namespace Wallets.Services
+{
+	public class WalletSaverService : IWalletSaverService
+	{
+		private readonly IWalletService _walletService;
+
+		public WalletSaverService(IWalletService walletService) => 
+			_walletService = walletService;
+
+		public void ReadProgress(ProjectProgress projectProgress)
+		{ }
+
+		public void WriteProgress(ProjectProgress projectProgress) => 
+			projectProgress.Inventory.Money = _walletService.Money;
+	}
+}

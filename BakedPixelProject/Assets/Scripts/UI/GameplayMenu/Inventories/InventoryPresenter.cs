@@ -1,22 +1,23 @@
 using System.Collections.Generic;
+using Infrastructure.StateMachines;
+using Infrastructure.StateMachines.States.Implementations;
 using Inventories.Domain;
 using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.PersistentProgressServices;
-using Services.SaveLoadServices;
 using UnityEngine;
 using Wallets.Services;
 
 namespace UI.GameplayMenu.Inventories
 {
-	public class InventoryPresenter : IProgressWriter 
+	public class InventoryPresenter 
 	{
 		private readonly IInventoryService _inventoryService;
 		private readonly InventoryView _inventoryView;
 		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
 		private readonly Transform _inventorySlotsContainer;
 		private readonly IWalletService _walletService;
-		private readonly ISaveLoadService _saveLoadService;
+		private readonly IGameStateMachine _gameStateMachine;
 
 		private List<InventorySlotPresenter> _inventorySlotPresenters;
 
@@ -25,16 +26,16 @@ namespace UI.GameplayMenu.Inventories
 			InventoryView inventoryView,
 			IInventorySlotPresenterFactory inventorySlotPresenterFactory,
 			Transform inventorySlotsContainer,
-			IWalletService walletService, 
-			ISaveLoadService saveLoadService
+			IWalletService walletService,
+			IGameStateMachine gameStateMachine
 			)
 		{
-			_saveLoadService = saveLoadService;
 			_inventoryService = inventoryService;
 			_inventoryView = inventoryView;
 			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
 			_inventorySlotsContainer = inventorySlotsContainer;
 			_walletService = walletService;
+			_gameStateMachine = gameStateMachine;
 		}
 
 		public void Show()
@@ -58,7 +59,7 @@ namespace UI.GameplayMenu.Inventories
 		}
 
 		private void SaveProgress() => 
-			_saveLoadService.SaveProgress();
+			_gameStateMachine.Enter<SaveProgressState>();
 
 		private void ChangeWeightText(float weight) => 
 			_inventoryView.SetInventoryWeightText(weight.ToString("F1"));
@@ -74,24 +75,10 @@ namespace UI.GameplayMenu.Inventories
 
 		private void ChangeCoinText(int walletMoney) => 
 			_inventoryView.SetCoinsText(walletMoney.ToString());
-
-		public void ReadProgress(ProjectProgress projectProgress)
-		{ }
-
+		
 		public void WriteProgress(ProjectProgress projectProgress)
 		{
-			projectProgress.Inventory.Slots = new List<Slot>(_inventoryService.Slots.Count);
-			projectProgress.Inventory.Money = _walletService.Money;
 			
-			foreach (IReadOnlyInventorySlot slot in _inventoryService.Slots)
-			{
-				projectProgress.Inventory.Slots.Add(
-					new Slot(
-						slot.Id, 
-						slot.Amount, 
-						new ItemKeyData(slot.Key.Type, slot.Key.EnumItemId), 
-						slot.IsLocked));
-			}
 		}
 	}
 }

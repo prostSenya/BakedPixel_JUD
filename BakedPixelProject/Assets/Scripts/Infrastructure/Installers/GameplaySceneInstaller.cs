@@ -25,6 +25,8 @@ namespace Infrastructure.Installers
 			builder.Register<IInventorySlotViewSpawner, InventorySlotViewSpawner>(Lifetime.Singleton);
 
 			builder.Register<IWalletService, WalletService>(Lifetime.Singleton);
+			builder.Register<InventorySaverServices>(Lifetime.Singleton).AsImplementedInterfaces();
+			builder.Register<WalletSaverService>(Lifetime.Singleton).AsImplementedInterfaces();
 
 			builder.Register<IInventoryService>(resolver => resolver.Resolve<IInventoryServiceFactory>().Create(), Lifetime.Singleton);
 		}

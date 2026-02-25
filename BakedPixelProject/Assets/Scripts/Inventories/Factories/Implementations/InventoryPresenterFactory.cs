@@ -1,3 +1,4 @@
+using Infrastructure.StateMachines;
 using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.SaveLoadServices;
@@ -12,19 +13,20 @@ namespace Inventories.Factories.Implementations
 		private readonly IInventoryService _inventoryService;
 		private readonly IInventorySlotPresenterFactory _inventorySlotPresenterFactory;
 		private readonly IWalletService _walletService;
-		private readonly ISaveLoadService _saveLoadService;
+		private readonly IGameStateMachine _gameStateMachine;
 
 		public InventoryPresenterFactory(
 			IInventoryService inventoryService, 
 			IInventorySlotPresenterFactory inventorySlotPresenterFactory,
 			IWalletService walletService,
-			ISaveLoadService saveLoadService
+			ISaveLoadService saveLoadService,
+			IGameStateMachine gameStateMachine
 			)
 		{
 			_inventoryService = inventoryService;
 			_inventorySlotPresenterFactory = inventorySlotPresenterFactory;
 			_walletService = walletService;
-			_saveLoadService = saveLoadService;
+			_gameStateMachine = gameStateMachine;
 		}
 
 		public InventoryPresenter Create(InventoryView inventoryView, Transform inventorySlotsContainer) => 
@@ -34,6 +36,6 @@ namespace Inventories.Factories.Implementations
 				_inventorySlotPresenterFactory,
 				inventorySlotsContainer, 
 				_walletService,
-				_saveLoadService);
+				_gameStateMachine);
 	}
 }

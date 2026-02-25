@@ -1,8 +1,9 @@
 ﻿using System;
+using UI.GameplayMenu.Inventories.Buttons.Views;
 using UnityEngine;
 using Wallets.Services;
 
-namespace UI.GameplayMenu.Buttons
+namespace UI.GameplayMenu.Inventories.Buttons.Presenters
 {
 	public class AddCoinPresenter : IDisposable
 	{
