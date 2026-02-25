@@ -2533,7 +2533,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8783376792415963263, guid: e97888b96e9e6174aa7ab093e2b145c4, type: 3}
       propertyPath: m_text
-      value: Add Coint
+      value: Add Coin
       objectReference: {fileID: 0}
     - target: {fileID: 8783376792415963263, guid: e97888b96e9e6174aa7ab093e2b145c4, type: 3}
       propertyPath: m_fontSize
@@ -2879,7 +2879,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Inventary
+  m_text: Inventory
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
