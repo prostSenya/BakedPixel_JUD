@@ -40,12 +40,14 @@ namespace Inventories.Factories.Implementations
 		{
 			if (_saveLoadService.HasSavedProgress == false)
 			{
-				InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
-				_inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
-
-				for (int i = 0; i < inventoryConfig.Capacity; i++)
-					_inventorySlots.Add(new InventorySlot(i, i >= inventoryConfig.UnlockSlotCountOnDefault));
 			}
+			
+			InventoryConfig inventoryConfig = _staticDataService.GetInventoryConfig();
+			_inventorySlots = new List<InventorySlot>(inventoryConfig.Capacity);
+
+			for (int i = 0; i < inventoryConfig.Capacity; i++)
+				_inventorySlots.Add(new InventorySlot(i, i >= inventoryConfig.UnlockSlotCountOnDefault));
+
 
 			return new InventoryService(_inventorySlots, _staticDataService, _randomService, _walletService);
 		}
