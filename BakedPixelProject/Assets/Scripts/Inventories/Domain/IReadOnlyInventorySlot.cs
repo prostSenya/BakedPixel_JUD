@@ -9,6 +9,8 @@ namespace Inventories.Domain
 		ItemKey Key { get; }
 		bool IsLocked { get; }
 		bool HasItem { get; }
-		event Action Updated;
+		event Action ItemSetted;
+		event Action Cleared;
+		event Action ItemRemoved;
 	}
 }

@@ -20,15 +20,16 @@ namespace Inventories.Domain
 		public bool HasItem => IsLocked == false && 
 		                       Key.Type != InventoryItemType.None && Count > 0;
 
-		public event Action Updated;
-		
+		public event Action ItemSetted;
+		public event Action ItemRemoved;
+		public event Action Cleared;
 		public void Set(ItemKey key, int count, float weight)
 		{
 			Weight = weight;
 			Key = key; 
 			Count = count;
 			Debug.Log($"InventorySlot {Id} set to {key.Type} (ID: {key.EnumId}) with count {count}");
-			Updated?.Invoke();
+			ItemSetted?.Invoke();
 		}
 		
 		public void RemoveCount(int count)
@@ -44,7 +45,7 @@ namespace Inventories.Domain
 				Count = 0;
 			}
 			
-			Updated?.Invoke();
+			ItemRemoved?.Invoke();
 		}
 		
 		public void Unlock() =>
@@ -52,6 +53,7 @@ namespace Inventories.Domain
 
 		public void Clear()
 		{
+			Cleared?.Invoke();
 			Key = new ItemKey(InventoryItemType.None, -1);
 			Count = 0;
 		}

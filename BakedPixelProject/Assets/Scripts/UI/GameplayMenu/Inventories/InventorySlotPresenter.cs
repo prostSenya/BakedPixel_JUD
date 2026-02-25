@@ -32,15 +32,25 @@ namespace UI.GameplayMenu.Inventories
 
 		public void Show()
 		{
-			_inventorySlot.Updated += UpdateInventorySlotView;
+			_inventorySlot.ItemSetted += UpdateInventorySlotView;
+			_inventorySlot.ItemRemoved += UpdateInventorySlotView;
+			_inventorySlot.Cleared += UpdateEmptyInventorySlotView;
 			_inventorySlotView.Clicked += ClickedOnView;
 			UpdateInventorySlotView();
 		}
 
 		public void Hide()
 		{
-			_inventorySlot.Updated -= UpdateInventorySlotView;
+			_inventorySlot.ItemSetted -= UpdateInventorySlotView;
+			_inventorySlot.ItemRemoved -= UpdateInventorySlotView;
+			_inventorySlot.Cleared -= UpdateEmptyInventorySlotView;
 			_inventorySlotView.Clicked -= ClickedOnView;
+		}
+
+		private void UpdateEmptyInventorySlotView()
+		{
+			_inventorySlotView.SetImage(_staticDataService.GetInventorySlotConfig().SpriteOnEmptySlot);
+			_inventorySlotView.SetTextCount(string.Empty);
 		}
 
 		private void ClickedOnView()
@@ -61,7 +71,7 @@ namespace UI.GameplayMenu.Inventories
 		{
 			Sprite sprite = _inventorySlot.HasItem ? GetItemSprite() : GetSlotViewSprite();
 
-			string textCount = _inventorySlot.Count == 0 ? string.Empty : _inventorySlot.Count.ToString();
+			string textCount = _inventorySlot.Count <= 1 ? string.Empty : _inventorySlot.Count.ToString();
 
 			_inventorySlotView.SetTextCount(textCount);
 			_inventorySlotView.SetImage(sprite);
