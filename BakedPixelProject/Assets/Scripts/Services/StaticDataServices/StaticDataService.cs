@@ -16,17 +16,19 @@ namespace Services.StaticDataServices
 		private const string ArmorConfigPath = "Armors";
 		private const string WeaponConfigPath = "Weapons";
 		private const string BulletConfigPath = "Bullets";
-		
+
 		private readonly IResourceLoader _resourceLoader;
-		
+
 		private InventoryConfig _inventoryConfig;
 		private InventorySlotConfig _inventorySlotConfig;
 		private Dictionary<ArmorType, ArmorConfig> _armorConfigs;
 		private Dictionary<WeaponType, WeaponConfig> _weaponConfigs;
 		private Dictionary<BulletType, BulletConfig> _bulletConfigs;
 		private Dictionary<BulletType, List<WeaponConfig>> _weaponsByBulletType;
+		private List<ArmorConfig> _torsoArmorConfigs;
+		private List<ArmorConfig> _headArmorConfigs;
 
-		public StaticDataService(IResourceLoader resourceLoader) => 
+		public StaticDataService(IResourceLoader resourceLoader) =>
 			_resourceLoader = resourceLoader;
 
 		public void LoadAll()
@@ -38,77 +40,96 @@ namespace Services.StaticDataServices
 			LoadBulletConfigs();
 		}
 
-		public InventoryConfig GetInventoryConfig() => 
+		public InventoryConfig GetInventoryConfig() =>
 			_inventoryConfig;
 
-		public InventorySlotConfig GetInventorySlotConfig() => 
+		public InventorySlotConfig GetInventorySlotConfig() =>
 			_inventorySlotConfig;
 
-		public ArmorConfig GetArmorConfig(ArmorType armorType) => 
-			_armorConfigs.TryGetValue(armorType, out var config) 
-				? config 
+		public ArmorConfig GetArmorConfig(ArmorType armorType) =>
+			_armorConfigs.TryGetValue(armorType, out var config)
+				? config
 				: throw new ArgumentException($"No config found for {armorType} in {nameof(StaticDataService)}");
-		
-		public WeaponConfig GetWeaponConfig(WeaponType weaponType) => 
-			_weaponConfigs.TryGetValue(weaponType, out var config) 
-				? config 
+
+		public List<ArmorConfig> GetTorsoArmorConfigs() => 
+			_torsoArmorConfigs;
+
+		public List<ArmorConfig> GetHeadArmorConfigs() => 
+			_headArmorConfigs;
+
+		public WeaponConfig GetWeaponConfig(WeaponType weaponType) =>
+			_weaponConfigs.TryGetValue(weaponType, out var config)
+				? config
 				: throw new ArgumentException($"No config found for {weaponType} in {nameof(StaticDataService)}");
 
 		public List<WeaponConfig> GetWeaponConfig(BulletType bulletType) =>
-			_weaponsByBulletType.TryGetValue(bulletType, out var config) 
-				? config 
+			_weaponsByBulletType.TryGetValue(bulletType, out var config)
+				? config
 				: throw new ArgumentException($"No config found for {bulletType} in {nameof(StaticDataService)}");
 
 		public BulletConfig GetBulletConfig(BulletType bulletType)
 		{
-			return _bulletConfigs.TryGetValue(bulletType, out var config) 
-				? config 
+			return _bulletConfigs.TryGetValue(bulletType, out var config)
+				? config
 				: throw new ArgumentException($"No config found for {bulletType} in {nameof(StaticDataService)}");
 		}
 
-		public List<BulletConfig> GetAllBulletConfigs() => 
+		public List<BulletConfig> GetAllBulletConfigs() =>
 			_bulletConfigs.Values.ToList();
 
 		private void LoadArmorConfigs()
 		{
 			_armorConfigs = (_resourceLoader.LoadAll<ArmorConfig>(ArmorConfigPath)
-			                 ?? 
-			                 throw new ArgumentException($"Failed to load {nameof(ArmorConfig)} at path: {ArmorConfigPath}"))
+			                 ??
+			                 throw new ArgumentException(
+				                 $"Failed to load {nameof(ArmorConfig)} at path: {ArmorConfigPath}"))
 				.ToDictionary(x => x.ArmorType, x => x);
+			
+			_headArmorConfigs = _armorConfigs.Values
+				.Where(armorConfig => armorConfig.ArmorType == ArmorType.Helmet || armorConfig.ArmorType == ArmorType.Cap)
+				.ToList();
+			
+			_torsoArmorConfigs = _armorConfigs.Values
+				.Where(armorConfig => armorConfig.ArmorType == ArmorType.Bulletproof || armorConfig.ArmorType == ArmorType.Jacket)
+				.ToList();
 		}
-		
+
 		private void LoadWeaponConfigs()
 		{
 			var weaponConfigs = (_resourceLoader.LoadAll<WeaponConfig>(WeaponConfigPath)
-			                  ?? 
-			                  throw new ArgumentException($"Failed to load {nameof(WeaponConfig)} at path: {WeaponConfigPath}"));
+			                     ??
+			                     throw new ArgumentException(
+				                     $"Failed to load {nameof(WeaponConfig)} at path: {WeaponConfigPath}"));
 
 			_weaponConfigs = weaponConfigs.ToDictionary(x => x.WeaponType, x => x);
 			_weaponsByBulletType = weaponConfigs
 				.GroupBy(x => x.UniqueBulletType)
 				.ToDictionary(g => g.Key, g => g.ToList());
 		}
-		
+
 		private void LoadBulletConfigs()
 		{
 			_bulletConfigs = (_resourceLoader.LoadAll<BulletConfig>(BulletConfigPath)
-			                  ?? 
-			                  throw new ArgumentException($"Failed to load {nameof(BulletConfig)} at path: {BulletConfigPath}"))
+			                  ??
+			                  throw new ArgumentException(
+				                  $"Failed to load {nameof(BulletConfig)} at path: {BulletConfigPath}"))
 				.ToDictionary(x => x.BulletType, x => x);
 		}
-		
+
 		private void LoadInventoryConfig()
 		{
-			_inventoryConfig = _resourceLoader.Load<InventoryConfig>(InventoryConfigPath) 
+			_inventoryConfig = _resourceLoader.Load<InventoryConfig>(InventoryConfigPath)
 			                   ??
-			                   throw new ArgumentException($"Failed to load {nameof(InventoryConfig)} at path: {InventoryConfigPath}");
+			                   throw new ArgumentException(
+				                   $"Failed to load {nameof(InventoryConfig)} at path: {InventoryConfigPath}");
 		}
-		
+
 		private void LoadInventorySlotConfig()
 		{
-			_inventorySlotConfig = _resourceLoader.Load<InventorySlotConfig>(InventorySlotConfigPath) 
+			_inventorySlotConfig = _resourceLoader.Load<InventorySlotConfig>(InventorySlotConfigPath)
 			                       ??
-			                       throw new ArgumentException($"Failed to load {nameof(InventorySlotConfig)} at path: {InventorySlotConfigPath}");
+			                       throw new ArgumentException(
+				                       $"Failed to load {nameof(InventorySlotConfig)} at path: {InventorySlotConfigPath}");
 		}
 	}
 }

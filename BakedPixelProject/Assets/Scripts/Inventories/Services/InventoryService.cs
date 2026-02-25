@@ -5,7 +5,6 @@ using Armors;
 using Bullets;
 using Helpers;
 using Inventories.Domain;
-using Services.PersistentProgressServices;
 using Services.RandomServices;
 using Services.StaticDataServices;
 using UnityEngine;
@@ -21,32 +20,45 @@ namespace Inventories.Services
 		private readonly IRandomService _randomService;
 		private readonly IWalletService _walletService;
 
-		private float _inventoryWeight = -1f;
+		private float _inventoryWeight;
 
 		public InventoryService(
 			List<InventorySlot> inventorySlots,
 			IStaticDataService staticDataService,
 			IRandomService randomService,
-			IWalletService walletService)
+			IWalletService walletService,
+			float inventoryWeight = -1f)
 		{
 			_inventorySlots = inventorySlots;
 			_staticDataService = staticDataService;
 			_randomService = randomService;
 			_walletService = walletService;
+			_inventoryWeight = inventoryWeight;
 		}
 
 		public event Action<float> InventaryWeightChanged;
 
-		public float GetInventoryWeight()
+		public float InventoryWeight
 		{
-			if (Mathf.Approximately(_inventoryWeight, -1f))
+			get
 			{
-				_inventoryWeight = _inventorySlots
-					.Where(inventorySlot => inventorySlot.IsLocked == false)
-					.Sum(inventorySlot => inventorySlot.Weight);
+				if (Mathf.Approximately(_inventoryWeight, -1f))
+				{
+					_inventoryWeight = _inventorySlots
+						.Where(inventorySlot => inventorySlot.IsLocked == false)
+						.Sum(inventorySlot => inventorySlot.Weight);
+				}
+				
+				return _inventoryWeight;
 			}
+			private set
+			{
+				if (Mathf.Approximately(_inventoryWeight, value))
+					return;
 
-			return _inventoryWeight;
+				_inventoryWeight = value;
+				InventaryWeightChanged?.Invoke(_inventoryWeight);
+			}
 		}
 
 		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
@@ -94,9 +106,8 @@ namespace Inventories.Services
 					slot.Set(itemKey, slot.Amount + toAdd, weight);
 					count -= toAdd;
 
-					_inventoryWeight += weight;
+					InventoryWeight += weight;
 
-					InventaryWeightChanged?.Invoke(_inventoryWeight);
 					if (count <= 0)
 						return true;
 				}
@@ -111,9 +122,8 @@ namespace Inventories.Services
 
 				slot.Set(itemKey, countToAdd, weight);
 				count -= countToAdd;
-				_inventoryWeight += weight;
 
-				InventaryWeightChanged?.Invoke(_inventoryWeight);
+				InventoryWeight += weight;
 
 				if (count <= 0)
 					return true;
@@ -124,6 +134,7 @@ namespace Inventories.Services
 
 		public bool TrySetItem(ItemKey itemKey, int count = 1)
 		{
+			Debug.Log("TrySetItem");
 			if (count <= 0)
 				return false;
 
@@ -154,9 +165,9 @@ namespace Inventories.Services
 
 				slot.Set(itemKey, 1, weight);
 				count--;
-
-				InventaryWeightChanged?.Invoke(_inventoryWeight);
-
+				
+				InventoryWeight += weight;
+				
 				if (count <= 0)
 					return true;
 			}
@@ -169,9 +180,8 @@ namespace Inventories.Services
 			InventorySlot inventorySlot = _inventorySlots[slot.Id] ??
 			                              throw new NullReferenceException($"InventorySlot {slot} not found");
 
-			_inventoryWeight -= inventorySlot.Weight;
+			InventoryWeight -= inventorySlot.Weight;
 			inventorySlot.Clear();
-			InventaryWeightChanged?.Invoke(_inventoryWeight);
 		}
 
 		public bool TryUnlockSlot(IReadOnlyInventorySlot slot)
@@ -234,9 +244,8 @@ namespace Inventories.Services
 
 			float inventoryWeight = _staticDataService.GetBulletConfig(bulletType).Weight;
 
-			_inventoryWeight -= inventoryWeight;
+			InventoryWeight -= inventoryWeight;
 			bulletSlot.RemoveCount(1);
-			InventaryWeightChanged?.Invoke(_inventoryWeight);
 		}
 
 		public IReadOnlyInventorySlot GetRandomSlot() =>

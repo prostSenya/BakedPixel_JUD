@@ -6,6 +6,7 @@ using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.RandomServices;
 using Services.SaveLoadServices;
+using Services.StaticDataServices;
 using UI.GameplayMenu.Buttons;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
@@ -31,9 +32,9 @@ namespace Infrastructure.Initializers
 		private IWalletService _walletService;
 		private IRandomService _randomService;
 		private IWeaponService _weaponService;
-		
 		private InventoryPresenter _inventoryPresenter;
 		private ISaveLoadService _saveLoadService;
+		private IStaticDataService _staticDataService;
 
 		[Inject]
 		private void Construct(
@@ -42,8 +43,10 @@ namespace Infrastructure.Initializers
 			IWalletService walletService,
 			IRandomService randomService,
 			IWeaponService weaponService,
-			ISaveLoadService saveLoadService)
+			ISaveLoadService saveLoadService,
+			IStaticDataService staticDataService)
 		{
+			_staticDataService = staticDataService;
 			_saveLoadService = saveLoadService;
 			_weaponService = weaponService;
 			_randomService = randomService;
@@ -75,8 +78,8 @@ namespace Infrastructure.Initializers
 				_addItemButton,
 				_inventoryService,
 				_randomService,
+				_staticDataService,
 				inventoryItemTypes,
-				EnumHelper.GetArmorTypes(),
 				EnumHelper.GetWeaponTypes());
 			addItemPresenter.Show();
 			

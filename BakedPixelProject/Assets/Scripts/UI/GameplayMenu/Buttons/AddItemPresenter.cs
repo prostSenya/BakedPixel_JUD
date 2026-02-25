@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Armors;
 using Inventories;
 using Inventories.Domain;
 using Inventories.Services;
 using Services.RandomServices;
+using Services.StaticDataServices;
 using UnityEngine;
 using Weapons;
 
@@ -14,23 +16,23 @@ namespace UI.GameplayMenu.Buttons
 		private readonly AddItemButton _addItemButton;
 		private readonly IInventoryService _inventoryService;
 		private readonly IRandomService _randomService;
+		private readonly IStaticDataService _staticDataService;
 		private readonly InventoryItemType[] _inventoryItemTypes;
-		private readonly ArmorType[] _armorTypes;
 		private readonly WeaponType[] _weaponTypes;
 
 		public AddItemPresenter(
 			AddItemButton addItemButton,
 			IInventoryService inventoryService,
 			IRandomService randomService,
+			IStaticDataService staticDataService,
 			InventoryItemType[] inventoryItemTypes,
-			ArmorType[] armorTypes,
 			WeaponType[] weaponTypes)
 		{
 			_addItemButton = addItemButton;
 			_inventoryService = inventoryService;
 			_randomService = randomService;
+			_staticDataService = staticDataService;
 			_inventoryItemTypes = inventoryItemTypes;
-			_armorTypes = armorTypes;
 			_weaponTypes = weaponTypes;
 		}
 
@@ -58,11 +60,13 @@ namespace UI.GameplayMenu.Buttons
 					break;
 
 				case InventoryItemType.Torso:
-					enumId = (int)_randomService.GetRandomElement(_armorTypes);
+					List<ArmorConfig> armorTorsoConfigs = _staticDataService.GetTorsoArmorConfigs();
+					enumId =  (int)_randomService.GetRandomElement(armorTorsoConfigs).ArmorType;
 					break;
 
 				case InventoryItemType.Head:
-					enumId = (int)_randomService.GetRandomElement(_armorTypes);
+					List<ArmorConfig> armorHeadConfigs = _staticDataService.GetHeadArmorConfigs();
+					enumId =  (int)_randomService.GetRandomElement(armorHeadConfigs).ArmorType;
 					break;
 				
 				default:

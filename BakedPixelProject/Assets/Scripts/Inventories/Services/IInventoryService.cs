@@ -20,6 +20,5 @@ namespace Inventories.Services
 		void ClearSlot(IReadOnlyInventorySlot slot);
 		bool TryUnlockSlot(IReadOnlyInventorySlot inventorySlot);
 		event Action<float> InventaryWeightChanged;
-		float GetInventoryWeight();
 	}
 }
