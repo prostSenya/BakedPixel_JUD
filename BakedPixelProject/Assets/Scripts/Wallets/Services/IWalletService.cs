@@ -4,5 +4,6 @@ namespace Wallets.Services
 	{
 		int Money { get; }
 		void AddMoney(int amount);
+		void DecreaseMoney(int amount);
 	}
 }

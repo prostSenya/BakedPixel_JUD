@@ -1,5 +1,6 @@
 ﻿using System;
 using Inventories.Services;
+using UnityEngine;
 using Wallets.Services;
 
 namespace UI.GameplayMenu.Buttons
@@ -21,7 +22,10 @@ namespace UI.GameplayMenu.Buttons
 		public void Dispose() => 
 			_addCoinsButton.Clicked -= OnClicked;
 
-		private void OnClicked(int amount) => 
+		private void OnClicked(int amount)
+		{
 			_walletService.AddMoney(amount);
+			Debug.Log($"{_walletService.Money}");
+		}
 	}
 }

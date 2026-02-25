@@ -4,6 +4,7 @@ using Bullets;
 using Helpers;
 using Inventories;
 using Inventories.Domain;
+using Inventories.Services;
 using Services.StaticDataServices;
 using UnityEngine;
 using Weapons;
@@ -15,26 +16,45 @@ namespace UI.GameplayMenu.Inventories
 		private readonly IReadOnlyInventorySlot _inventorySlot;
 		private readonly InventorySlotView _inventorySlotView;
 		private readonly IStaticDataService _staticDataService;
+		private readonly IInventoryService _inventoryService;
 
 		public InventorySlotPresenter(
 			IReadOnlyInventorySlot inventorySlot,
 			InventorySlotView inventorySlotView,
-			IStaticDataService staticDataService)
+			IStaticDataService staticDataService,
+			IInventoryService inventoryService)
 		{
 			_inventorySlot = inventorySlot;
 			_inventorySlotView = inventorySlotView;
 			_staticDataService = staticDataService;
+			_inventoryService = inventoryService;
 		}
 
 		public void Show()
 		{
 			_inventorySlot.Updated += UpdateInventorySlotView;
+			_inventorySlotView.Clicked += ClickedOnView;
 			UpdateInventorySlotView();
 		}
 
 		public void Hide()
 		{
 			_inventorySlot.Updated -= UpdateInventorySlotView;
+			_inventorySlotView.Clicked -= ClickedOnView;
+		}
+
+		private void ClickedOnView()
+		{
+			if (_inventorySlot.IsLocked == false)
+				return;
+
+			if (_inventoryService.TryUnlockSlot(_inventorySlot) == false)
+			{
+				Debug.LogError($"Failed to unlock inventory slot {_inventorySlot.Key}. Not enough resources.");
+				return;
+			}
+
+			_inventorySlotView.SetImage(_staticDataService.GetInventorySlotConfig().SpriteOnEmptySlot);
 		}
 
 		private void UpdateInventorySlotView()

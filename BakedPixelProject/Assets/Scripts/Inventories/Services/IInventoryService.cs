@@ -17,5 +17,6 @@ namespace Inventories.Services
 		IReadOnlyInventorySlot GetRandomSlot();
 		bool TrySetItem(ItemKey itemKey, int count = 1);
 		void ClearSlot(IReadOnlyInventorySlot slot);
+		bool TryUnlockSlot(IReadOnlyInventorySlot inventorySlot);
 	}
 }

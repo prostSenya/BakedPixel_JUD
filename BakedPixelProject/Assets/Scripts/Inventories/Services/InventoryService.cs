@@ -6,6 +6,7 @@ using Helpers;
 using Inventories.Domain;
 using Services.RandomServices;
 using Services.StaticDataServices;
+using Wallets.Services;
 using Weapons;
 
 namespace Inventories.Services
@@ -15,15 +16,18 @@ namespace Inventories.Services
 		private readonly List<InventorySlot> _inventorySlots;
 		private readonly IStaticDataService _staticDataService;
 		private readonly IRandomService _randomService;
+		private readonly IWalletService _walletService;
 
 		public InventoryService(
 			List<InventorySlot> inventorySlots, 
 			IStaticDataService staticDataService,
-			IRandomService randomService)
+			IRandomService randomService,
+			IWalletService walletService)
 		{
 			_inventorySlots = inventorySlots;
 			_staticDataService = staticDataService;
 			_randomService = randomService;
+			_walletService = walletService;
 		}
 
 		public bool IsEmptyInventory => _inventorySlots.All(x => x.HasItem == false);
@@ -111,8 +115,33 @@ namespace Inventories.Services
 
 		}
 
-		public void ClearSlot(IReadOnlyInventorySlot slot) => 
-			_inventorySlots[slot.Id]?.Clear();
+		public void ClearSlot(IReadOnlyInventorySlot slot)
+		{
+			InventorySlot inventorySlot = _inventorySlots[slot.Id] ?? throw new NullReferenceException($"InventorySlot {slot} not found");
+			inventorySlot.Clear();
+		}
+
+
+		public bool TryUnlockSlot(IReadOnlyInventorySlot slot)
+		{
+			InventorySlot inventorySlot = _inventorySlots[slot.Id];
+
+			if (inventorySlot == null)
+				return false;
+			
+			if (inventorySlot.IsLocked == false)
+				return false;
+
+			int unlockSlotPrice = _staticDataService.GetInventorySlotConfig().UnlockSlotPrice;
+
+			if(unlockSlotPrice > _walletService.Money)
+				return false;
+			
+			inventorySlot.Unlock();
+			_walletService.DecreaseMoney(unlockSlotPrice);
+			
+			return true;
+		}
 
 		public bool TryGetWeaponByBullet(BulletType bulletType, out WeaponType weaponType)
 		{

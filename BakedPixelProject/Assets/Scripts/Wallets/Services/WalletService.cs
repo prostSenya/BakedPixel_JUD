@@ -10,5 +10,13 @@
 			
 			Money += amount;
 		}
+
+		public void DecreaseMoney(int amount)
+		{
+			if (amount <= 0)
+				return;
+			
+			Money -= amount;
+		}
 	}
 }

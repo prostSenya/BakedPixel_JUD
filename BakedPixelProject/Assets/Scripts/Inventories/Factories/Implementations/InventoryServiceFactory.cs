@@ -5,19 +5,23 @@ using Inventories.Services;
 using Services.RandomServices;
 using Services.StaticDataServices;
 using UnityEngine;
+using Wallets.Services;
 
 namespace Inventories.Factories
 {
 	public class InventoryServiceFactory : IInventoryServiceFactory
 	{
 		private readonly IRandomService _randomService;
+		private readonly IWalletService _walletService;
 		private readonly IStaticDataService _staticDataService;
 
 		public InventoryServiceFactory(
 			IStaticDataService staticDataService, 
-			IRandomService randomService)
+			IRandomService randomService,
+			IWalletService walletService)
 		{
 			_randomService = randomService;
+			_walletService = walletService;
 			_staticDataService = staticDataService;
 		}
 		
@@ -29,7 +33,7 @@ namespace Inventories.Factories
 			for (int i = 0; i < inventoryConfig.Capacity; i++) 
 				inventorySlots.Add(new InventorySlot(i,i >= inventoryConfig.UnlockSlotCountOnDefault));
 			
-			return new InventoryService(inventorySlots, _staticDataService, _randomService);
+			return new InventoryService(inventorySlots, _staticDataService, _randomService, _walletService);
 		}
 	}
 }
