@@ -1,6 +1,6 @@
 using Services.PersistentProgressServices;
 
-namespace Wallets.Services
+namespace Wallets.Services.Factories
 {
 	public class WalletServiceFactory : IWalletServiceFactory
 	{

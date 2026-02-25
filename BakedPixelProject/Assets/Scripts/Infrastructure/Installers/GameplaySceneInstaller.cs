@@ -3,10 +3,13 @@ using Inventories.Factories.Implementations;
 using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Inventories.Spawners;
+using UI.GameplayMenu.Factories.Implementations;
+using UI.GameplayMenu.Factories.Interfaces;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wallets.Services;
+using Wallets.Services.Factories;
 
 namespace Infrastructure.Installers
 {
@@ -23,6 +26,11 @@ namespace Infrastructure.Installers
 			builder.Register<IInventoryServiceFactory, InventoryServiceFactory>(Lifetime.Singleton);
 			builder.Register<IInventoryPresenterFactory, InventoryPresenterFactory>(Lifetime.Singleton);
 			builder.Register<IInventorySlotPresenterFactory, InventorySlotPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IAddBulletsButtonPresenterFactory, AddBulletsButtonPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IAddCoinsButtonPresenterFactory, AddCoinsButtonPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IAddItemButtonPresenterFactory, AddItemButtonPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IRemoveItemButtonPresenterFactory, RemoveItemButtonPresenterFactory>(Lifetime.Singleton);
+			builder.Register<IShootButtonPresenterFactory, ShootButtonPresenterFactory>(Lifetime.Singleton);
 
 			builder.Register<IInventorySlotViewSpawner, InventorySlotViewSpawner>(Lifetime.Singleton);
 			builder.Register<InventorySaverServices>(Lifetime.Singleton).AsImplementedInterfaces();

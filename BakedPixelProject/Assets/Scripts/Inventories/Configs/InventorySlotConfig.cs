@@ -1,4 +1,5 @@
 using UI.GameplayMenu.Inventories;
+using UI.GameplayMenu.Inventories.Implementations;
 using UnityEngine;
 
 namespace Inventories.Configs

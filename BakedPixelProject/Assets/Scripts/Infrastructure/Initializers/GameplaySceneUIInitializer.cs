@@ -1,20 +1,13 @@
-﻿using System;
-using System.Linq;
-using Helpers;
-using Inventories;
-using Inventories.Factories.Interfaces;
-using Inventories.Services;
-using Services.RandomServices;
-using Services.StaticDataServices;
+using System.Collections.Generic;
+using UI.BaseUI.Interfaces;
+using UI.GameplayMenu.Factories.Interfaces;
 using UI.GameplayMenu.Inventories;
-using UI.GameplayMenu.Inventories.Buttons;
-using UI.GameplayMenu.Inventories.Buttons.Presenters;
 using UI.GameplayMenu.Inventories.Buttons.Views;
+using UI.GameplayMenu.Inventories.Buttons.Views.Implenetations;
+using UI.GameplayMenu.Inventories.Implementations;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wallets.Services;
-using Weapons.Services;
 
 namespace Infrastructure.Initializers
 {
@@ -27,76 +20,51 @@ namespace Infrastructure.Initializers
 		[SerializeField] private AddItemButton _addItemButton;
 		[SerializeField] private RemoveItemButton _removeItemButton;
 		[SerializeField] private ShootButton _shootButton;
-		
+
 		private IInventoryPresenterFactory _inventoryPresenterFactory;
-		private IInventoryService _inventoryService;
-		private IWalletService _walletService;
-		private IRandomService _randomService;
-		private IWeaponService _weaponService;
-		private InventoryPresenter _inventoryPresenter;
-		private IStaticDataService _staticDataService;
+		private IAddBulletsButtonPresenterFactory _addBulletsButtonPresenterFactory;
+		private IAddCoinsButtonPresenterFactory _addCoinsButtonPresenterFactory;
+		private IAddItemButtonPresenterFactory _addItemButtonPresenterFactory;
+		private IRemoveItemButtonPresenterFactory _removeItemButtonPresenterFactory;
+		private IShootButtonPresenterFactory _shootButtonPresenterFactory;
+
+		private readonly List<IPresenter> _presenters = new();
 
 		[Inject]
 		private void Construct(
 			IInventoryPresenterFactory inventoryPresenterFactory,
-			IInventoryService inventoryService,
-			IWalletService walletService,
-			IRandomService randomService,
-			IWeaponService weaponService,
-			IStaticDataService staticDataService)
+			IAddBulletsButtonPresenterFactory addBulletsButtonPresenterFactory,
+			IAddCoinsButtonPresenterFactory addCoinsButtonPresenterFactory,
+			IAddItemButtonPresenterFactory addItemButtonPresenterFactory,
+			IRemoveItemButtonPresenterFactory removeItemButtonPresenterFactory,
+			IShootButtonPresenterFactory shootButtonPresenterFactory)
 		{
-			_staticDataService = staticDataService;
-			_weaponService = weaponService;
-			_randomService = randomService;
-			_walletService = walletService;
-			_inventoryService = inventoryService;
 			_inventoryPresenterFactory = inventoryPresenterFactory;
+			_addBulletsButtonPresenterFactory = addBulletsButtonPresenterFactory;
+			_addCoinsButtonPresenterFactory = addCoinsButtonPresenterFactory;
+			_addItemButtonPresenterFactory = addItemButtonPresenterFactory;
+			_removeItemButtonPresenterFactory = removeItemButtonPresenterFactory;
+			_shootButtonPresenterFactory = shootButtonPresenterFactory;
 		}
 
 		public void Initialize()
 		{
-			_inventoryPresenter = _inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer);
-			
-			AddBulletsPresenter addBulletsPresenter = new AddBulletsPresenter(_inventoryService, _addBulletsButton, EnumHelper.GetBulletTypes());
-			addBulletsPresenter.Show();
-			
-			AddCoinPresenter addCoinPresenter = new AddCoinPresenter(_addCoinsButton, _walletService);
-			addCoinPresenter.Show();
-			
-			InventoryItemType[] inventoryItemTypes = Enum.GetValues(typeof(InventoryItemType))
-				.Cast<InventoryItemType>()
-				.Where(type => 
-					type != InventoryItemType.Unknown &&
-					type != InventoryItemType.Ammo &&
-					type != InventoryItemType.Empty)
-				.ToArray();
+			_presenters.Clear();
+			_presenters.Add(_inventoryPresenterFactory.Create(_inventoryView, _inventorySlotContainer));
+			_presenters.Add(_addBulletsButtonPresenterFactory.Create(_addBulletsButton));
+			_presenters.Add(_addCoinsButtonPresenterFactory.Create(_addCoinsButton));
+			_presenters.Add(_addItemButtonPresenterFactory.Create(_addItemButton));
+			_presenters.Add(_removeItemButtonPresenterFactory.Create(_removeItemButton));
+			_presenters.Add(_shootButtonPresenterFactory.Create(_shootButton));
 
-			AddItemPresenter addItemPresenter = new AddItemPresenter(
-				_addItemButton,
-				_inventoryService,
-				_randomService,
-				_staticDataService,
-				inventoryItemTypes,
-				EnumHelper.GetWeaponTypes());
-			addItemPresenter.Show();
-			
-			RemoveItemPresenter removeItemPresenter = new RemoveItemPresenter(_removeItemButton, _inventoryService);
-			removeItemPresenter.Show();
-			
-			ShootPresenter shootPresenter = new ShootPresenter(
-				_shootButton, 
-				_inventoryService,
-				_weaponService,
-				_randomService,
-				EnumHelper.GetBulletTypes());
-			shootPresenter.Show();
-
-			_inventoryPresenter.Show();
+			foreach (IPresenter presenter in _presenters)
+				presenter.Activate();
 		}
 
 		private void OnDestroy()
 		{
-			_inventoryPresenter.Hide();
+			foreach (IPresenter presenter in _presenters)
+				presenter.Deactivate();
 		}
 	}
 }

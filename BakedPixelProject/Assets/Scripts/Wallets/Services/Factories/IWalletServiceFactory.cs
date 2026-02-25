@@ -1,4 +1,4 @@
-namespace Wallets.Services
+namespace Wallets.Services.Factories
 {
 	public interface IWalletServiceFactory
 	{

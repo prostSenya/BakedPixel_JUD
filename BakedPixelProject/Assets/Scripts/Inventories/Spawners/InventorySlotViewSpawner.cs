@@ -1,6 +1,7 @@
 ﻿using Inventories.Configs;
 using Services.StaticDataServices;
 using UI.GameplayMenu.Inventories;
+using UI.GameplayMenu.Inventories.Interfaces;
 using UnityEngine;
 
 namespace Inventories.Spawners
@@ -12,8 +13,7 @@ namespace Inventories.Spawners
 		public InventorySlotViewSpawner(IStaticDataService staticDataService) => 
 			_staticDataService = staticDataService;
 
-		// TODO InventorySlotView - IInventorySlotView
-		public InventorySlotView Spawn(Transform parent)
+		public IInventorySlotView Spawn(Transform parent)
 		{
 			InventorySlotConfig config = _staticDataService.GetInventorySlotConfig();
 

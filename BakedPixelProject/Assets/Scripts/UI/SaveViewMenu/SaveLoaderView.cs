@@ -1,13 +1,20 @@
-﻿using UnityEngine;
+﻿using UI.BaseUI.Implementations;
+using UnityEngine;
 
 namespace UI.SaveViewMenu
 {
-	public class SaveLoaderView : MonoBehaviour
+	public class SaveLoaderView : View, ISaveLoaderView
 	{
-		public void Activate() => 
+		public override void Activate()
+		{
 			enabled = true;
+			OnActivate();
+		}
 
-		public void Deactivate() => 
+		public override void Deactivate()
+		{
 			enabled = false;
+			OnDeactivate();
+		}
 	}
 }
