@@ -5,7 +5,7 @@ namespace Inventories.Domain
 	public interface IReadOnlyInventorySlot
 	{
 		int Id { get; }
-		int Count { get; }
+		int Amount { get; }
 		ItemKey Key { get; }
 		bool IsLocked { get; }
 		bool HasItem { get; }

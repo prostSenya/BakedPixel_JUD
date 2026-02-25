@@ -17,7 +17,7 @@ namespace Infrastructure.Installers
 		public override void Install(IContainerBuilder builder)
 		{
 			builder.RegisterComponent(_gameplaySceneUIInitializer).AsImplementedInterfaces();
-			
+
 			builder.Register<IInventoryServiceFactory, InventoryServiceFactory>(Lifetime.Singleton);
 			builder.Register<IInventoryPresenterFactory, InventoryPresenterFactory>(Lifetime.Singleton);
 			builder.Register<IInventorySlotPresenterFactory, InventorySlotPresenterFactory>(Lifetime.Singleton);
@@ -25,10 +25,8 @@ namespace Infrastructure.Installers
 			builder.Register<IInventorySlotViewSpawner, InventorySlotViewSpawner>(Lifetime.Singleton);
 
 			builder.Register<IWalletService, WalletService>(Lifetime.Singleton);
-			
-			builder.Register<IInventoryService>(
-				resolver => resolver.Resolve<IInventoryServiceFactory>().Create(),
-				Lifetime.Singleton);
+
+			builder.Register<IInventoryService>(resolver => resolver.Resolve<IInventoryServiceFactory>().Create(), Lifetime.Singleton);
 		}
 	}
 }

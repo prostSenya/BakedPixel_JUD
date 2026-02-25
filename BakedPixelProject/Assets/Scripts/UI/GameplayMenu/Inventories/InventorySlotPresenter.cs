@@ -71,7 +71,7 @@ namespace UI.GameplayMenu.Inventories
 		{
 			Sprite sprite = _inventorySlot.HasItem ? GetItemSprite() : GetSlotViewSprite();
 
-			string textCount = _inventorySlot.Count <= 1 ? string.Empty : _inventorySlot.Count.ToString();
+			string textCount = _inventorySlot.Amount <= 1 ? string.Empty : _inventorySlot.Amount.ToString();
 
 			_inventorySlotView.SetTextCount(textCount);
 			_inventorySlotView.SetImage(sprite);
@@ -82,26 +82,26 @@ namespace UI.GameplayMenu.Inventories
 			switch (_inventorySlot.Key.Type)
 			{
 				case InventoryItemType.Weapon:
-					if (EnumHelper.TryParse(_inventorySlot.Key.EnumId, out WeaponType weaponType) == false)
+					if (EnumHelper.TryParse(_inventorySlot.Key.EnumItemId, out WeaponType weaponType) == false)
 						throw new Exception("Failed to parse weapon type from inventory slot ID.");
 					return _staticDataService.GetWeaponConfig(weaponType).InventoryItemData.Sprite;
 
 				case InventoryItemType.Torso:
-					if (EnumHelper.TryParse(_inventorySlot.Key.EnumId, out ArmorType armorType) == false)
+					if (EnumHelper.TryParse(_inventorySlot.Key.EnumItemId, out ArmorType armorType) == false)
 						throw new Exception("Failed to parse armor type from inventory slot ID.");
 					return _staticDataService.GetArmorConfig(armorType).InventoryItemData.Sprite;
 
 				case InventoryItemType.Head:
-					if (EnumHelper.TryParse(_inventorySlot.Key.EnumId, out armorType) == false)
+					if (EnumHelper.TryParse(_inventorySlot.Key.EnumItemId, out armorType) == false)
 						throw new Exception("Failed to parse armor type from inventory slot ID.");
 					return _staticDataService.GetArmorConfig(armorType).InventoryItemData.Sprite;
 
 				case InventoryItemType.Ammo:
-					if (EnumHelper.TryParse(_inventorySlot.Key.EnumId, out BulletType bulletType) == false)
+					if (EnumHelper.TryParse(_inventorySlot.Key.EnumItemId, out BulletType bulletType) == false)
 						throw new Exception("Failed to parse bullet type from inventory slot ID.");
 					return _staticDataService.GetBulletConfig(bulletType).InventoryItemData.Sprite;
 
-				case InventoryItemType.None:
+				case InventoryItemType.Empty:
 				case InventoryItemType.Unknown:
 				default:
 					throw new ArgumentOutOfRangeException();

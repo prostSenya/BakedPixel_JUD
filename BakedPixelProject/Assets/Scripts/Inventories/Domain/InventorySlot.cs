@@ -14,11 +14,11 @@ namespace Inventories.Domain
 
 		public float Weight { get; private set; }
 		public int Id { get; }
-		public int Count { get; private set; }
+		public int Amount { get; private set; }
 		public ItemKey Key { get; private set; }
 		public bool IsLocked { get; private set; }
 		public bool HasItem => IsLocked == false && 
-		                       Key.Type != InventoryItemType.None && Count > 0;
+		                       Key.Type != InventoryItemType.Empty && Amount > 0;
 
 		public event Action ItemSetted;
 		public event Action ItemRemoved;
@@ -27,22 +27,22 @@ namespace Inventories.Domain
 		{
 			Weight = weight;
 			Key = key; 
-			Count = count;
-			Debug.Log($"InventorySlot {Id} set to {key.Type} (ID: {key.EnumId}) with count {count}");
+			Amount = count;
+			Debug.Log($"InventorySlot {Id} set to {key.Type} (ID: {key.EnumItemId}) with count {count}");
 			ItemSetted?.Invoke();
 		}
 		
 		public void RemoveCount(int count)
 		{
-			if (Count <= 0)
+			if (Amount <= 0)
 				return;
 			
-			Count -= count;
+			Amount -= count;
 
-			if (Count <= 0)
+			if (Amount <= 0)
 			{
 				Key = ItemKey.CreateEmptyItem();
-				Count = 0;
+				Amount = 0;
 			}
 			
 			ItemRemoved?.Invoke();
@@ -54,25 +54,25 @@ namespace Inventories.Domain
 		public void Clear()
 		{
 			Cleared?.Invoke();
-			Key = new ItemKey(InventoryItemType.None, -1);
-			Count = 0;
+			Key = new ItemKey(InventoryItemType.Empty, -1);
+			Amount = 0;
 		}
 	}
 	
 	public readonly struct ItemKey : IEquatable<ItemKey>
 	{
-		public ItemKey(InventoryItemType type, int enumId)
+		public ItemKey(InventoryItemType type, int enumItemId)
 		{
 			Type = type; 
-			EnumId = enumId;
+			EnumItemId = enumItemId;
 		}
 			
 		public InventoryItemType Type { get; }
-		public int EnumId { get; }
+		public int EnumItemId { get; }
 
 		public bool Equals(ItemKey other)
 		{
-			return Type == other.Type && EnumId == other.EnumId;
+			return Type == other.Type && EnumItemId == other.EnumItemId;
 		}
 
 		public override bool Equals(object obj)
@@ -82,10 +82,10 @@ namespace Inventories.Domain
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine((int)Type, EnumId);
+			return HashCode.Combine((int)Type, EnumItemId);
 		}
 
 		public static ItemKey CreateEmptyItem() => 
-			new(InventoryItemType.None, -1);
+			new(InventoryItemType.Empty, -1);
 	}
 }

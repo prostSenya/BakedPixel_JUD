@@ -8,6 +8,6 @@ namespace Inventories
 		Head = 3,
 		Ammo = 4,
 		
-		None = 99
+		Empty = 99
 	}
 }

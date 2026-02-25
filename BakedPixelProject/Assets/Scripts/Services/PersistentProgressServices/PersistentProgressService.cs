@@ -1,3 +1,4 @@
+using System;
 using Services.JsonConvertServices;
 
 namespace Services.PersistentProgressServices
@@ -14,9 +15,7 @@ namespace Services.PersistentProgressServices
 		public void LoadProgress(string json) => 
 			ProjectProgress = _jsonConvertService.FromJson<ProjectProgress>(json);
 
-		public void SetDefaultProgress()
-		{
+		public void SetDefaultProgress() => 
 			ProjectProgress = new ProjectProgress();
-		}
 	}
 }

@@ -5,5 +5,7 @@
 		void SaveProgress();
 		void LoadProgress();
 		bool HasSavedProgress { get; }
+		void RegisterProgressReader(IProgressReader reader);
+		void UnregisterProgressReader(IProgressReader reader);
 	}
 }

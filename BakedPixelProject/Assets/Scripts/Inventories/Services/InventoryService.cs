@@ -5,6 +5,7 @@ using Armors;
 using Bullets;
 using Helpers;
 using Inventories.Domain;
+using Services.PersistentProgressServices;
 using Services.RandomServices;
 using Services.StaticDataServices;
 using UnityEngine;
@@ -66,8 +67,8 @@ namespace Inventories.Services
 			int maxStackableCount;
 			float weight;
 
-			if (EnumHelper.TryParse(itemKey.EnumId, out BulletType bulletType) == false)
-				throw new Exception("Invalid item key enum id: " + itemKey.EnumId);
+			if (EnumHelper.TryParse(itemKey.EnumItemId, out BulletType bulletType) == false)
+				throw new Exception("Invalid item key enum id: " + itemKey.EnumItemId);
 
 			BulletConfig bulletConfig = _staticDataService.GetBulletConfig(bulletType);
 			isStackable = bulletConfig.IsStackable;
@@ -84,13 +85,13 @@ namespace Inventories.Services
 					if (slot.Key.Equals(itemKey) == false)
 						continue;
 
-					int freeCount = maxStackableCount - slot.Count;
+					int freeCount = maxStackableCount - slot.Amount;
 
 					if (freeCount <= 0)
 						continue;
 
 					int toAdd = Math.Min(freeCount, count);
-					slot.Set(itemKey, slot.Count + toAdd, weight);
+					slot.Set(itemKey, slot.Amount + toAdd, weight);
 					count -= toAdd;
 
 					_inventoryWeight += weight;
@@ -133,17 +134,17 @@ namespace Inventories.Services
 
 			if (itemKey.Type == InventoryItemType.Torso || itemKey.Type == InventoryItemType.Head)
 			{
-				ArmorConfig armorConfig = _staticDataService.GetArmorConfig((ArmorType)itemKey.EnumId);
+				ArmorConfig armorConfig = _staticDataService.GetArmorConfig((ArmorType)itemKey.EnumItemId);
 				weight = armorConfig.Weight;
 			}
 			else if (itemKey.Type == InventoryItemType.Weapon)
 			{
-				WeaponConfig weaponConfig = _staticDataService.GetWeaponConfig((WeaponType)itemKey.EnumId);
+				WeaponConfig weaponConfig = _staticDataService.GetWeaponConfig((WeaponType)itemKey.EnumItemId);
 				weight = weaponConfig.Weight;
 			}
 			else
 			{
-				throw new Exception("Invalid item key enum id: " + itemKey.EnumId);
+				throw new Exception("Invalid item key enum id: " + itemKey.EnumItemId);
 			}
 
 			foreach (InventorySlot slot in _inventorySlots)
@@ -206,7 +207,7 @@ namespace Inventories.Services
 				if (slot.Key.Type != InventoryItemType.Weapon)
 					continue;
 
-				if (EnumHelper.TryParse(slot.Key.EnumId, out weaponType) == false)
+				if (EnumHelper.TryParse(slot.Key.EnumItemId, out weaponType) == false)
 					continue;
 
 				WeaponConfig config = _staticDataService.GetWeaponConfig(weaponType);
