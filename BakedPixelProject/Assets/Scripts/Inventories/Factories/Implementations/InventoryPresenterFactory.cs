@@ -1,8 +1,9 @@
+using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
-namespace Inventories.Factories
+namespace Inventories.Factories.Implementations
 {
 	public class InventoryPresenterFactory : IInventoryPresenterFactory
 	{

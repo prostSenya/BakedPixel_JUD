@@ -1,10 +1,12 @@
 using Inventories.Domain;
+using Inventories.Factories.Interfaces;
 using Inventories.Services;
+using Inventories.Spawners;
 using Services.StaticDataServices;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
-namespace Inventories.Factories
+namespace Inventories.Factories.Implementations
 {
 	public class InventorySlotPresenterFactory : IInventorySlotPresenterFactory
 	{

@@ -1,6 +1,6 @@
 using Inventories.Services;
 
-namespace Inventories.Factories
+namespace Inventories.Factories.Interfaces
 {
 	public interface IInventoryServiceFactory
 	{

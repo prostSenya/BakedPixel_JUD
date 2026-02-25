@@ -3,7 +3,7 @@ using Services.StaticDataServices;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
-namespace Inventories.Factories
+namespace Inventories.Spawners
 {
 	public class InventorySlotViewSpawner : IInventorySlotViewSpawner
 	{

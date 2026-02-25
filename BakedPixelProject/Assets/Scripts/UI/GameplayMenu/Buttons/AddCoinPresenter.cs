@@ -1,5 +1,4 @@
 ﻿using System;
-using Inventories.Services;
 using UnityEngine;
 using Wallets.Services;
 

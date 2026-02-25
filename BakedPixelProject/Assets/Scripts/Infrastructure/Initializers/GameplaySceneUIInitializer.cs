@@ -2,7 +2,7 @@
 using System.Linq;
 using Helpers;
 using Inventories;
-using Inventories.Factories;
+using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.RandomServices;
 using UI.GameplayMenu.Buttons;

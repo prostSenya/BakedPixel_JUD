@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Inventories.Configs;
 using Inventories.Domain;
+using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using Services.RandomServices;
 using Services.StaticDataServices;
-using UnityEngine;
 using Wallets.Services;
 
-namespace Inventories.Factories
+namespace Inventories.Factories.Implementations
 {
 	public class InventoryServiceFactory : IInventoryServiceFactory
 	{

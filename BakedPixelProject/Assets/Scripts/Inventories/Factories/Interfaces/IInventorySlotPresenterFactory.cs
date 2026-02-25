@@ -2,7 +2,7 @@ using Inventories.Domain;
 using UI.GameplayMenu.Inventories;
 using UnityEngine;
 
-namespace Inventories.Factories
+namespace Inventories.Factories.Interfaces
 {
 	public interface IInventorySlotPresenterFactory
 	{

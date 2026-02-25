@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Inventories.Factories;
+using Inventories.Factories.Interfaces;
 using Inventories.Services;
 using UnityEngine;
 
