@@ -23,7 +23,7 @@ namespace UI.GameplayMenu.Inventories
 			SaveButtonClicked?.Invoke();
 
 		public void SetInventoryWeightText(string text) => 
-			_inventoryWeightText.text = $"Inventory weight = {text} кг";
+			_inventoryWeightText.text = $"Inventory weight = {text} kg";
 		
 		public void SetCoinsText(string text) => 
 			_coinsText.text = $"Coins = {text}";

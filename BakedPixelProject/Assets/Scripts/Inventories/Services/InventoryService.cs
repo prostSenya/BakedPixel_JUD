@@ -15,6 +15,8 @@ namespace Inventories.Services
 {
 	public class InventoryService : IInventoryService
 	{
+		private const float BaseInventoryWeight = -1f;
+		
 		private readonly List<InventorySlot> _inventorySlots;
 		private readonly IStaticDataService _staticDataService;
 		private readonly IRandomService _randomService;
@@ -27,7 +29,7 @@ namespace Inventories.Services
 			IStaticDataService staticDataService,
 			IRandomService randomService,
 			IWalletService walletService,
-			float inventoryWeight = -1f)
+			float inventoryWeight = BaseInventoryWeight)
 		{
 			_inventorySlots = inventorySlots;
 			_staticDataService = staticDataService;
@@ -40,23 +42,23 @@ namespace Inventories.Services
 
 		public float InventoryWeight
 		{
-			get
-			{
-				if (Mathf.Approximately(_inventoryWeight, -1f))
-				{
-					_inventoryWeight = _inventorySlots
-						.Where(inventorySlot => inventorySlot.IsLocked == false)
-						.Sum(inventorySlot => inventorySlot.Weight);
-				}
-				
-				return _inventoryWeight;
-			}
+			get { return _inventoryWeight; }
 			private set
 			{
 				if (Mathf.Approximately(_inventoryWeight, value))
 					return;
 
-				_inventoryWeight = value;
+				if (_inventoryWeight <= BaseInventoryWeight)
+				{
+					_inventoryWeight = _inventorySlots
+						.Where(inventorySlot => inventorySlot.IsLocked == false)
+						.Sum(inventorySlot => inventorySlot.Weight);
+				}
+				else
+				{
+					_inventoryWeight = value;
+				}
+
 				InventaryWeightChanged?.Invoke(_inventoryWeight);
 			}
 		}
@@ -134,7 +136,6 @@ namespace Inventories.Services
 
 		public bool TrySetItem(ItemKey itemKey, int count = 1)
 		{
-			Debug.Log("TrySetItem");
 			if (count <= 0)
 				return false;
 
@@ -165,9 +166,9 @@ namespace Inventories.Services
 
 				slot.Set(itemKey, 1, weight);
 				count--;
-				
+
 				InventoryWeight += weight;
-				
+
 				if (count <= 0)
 					return true;
 			}
