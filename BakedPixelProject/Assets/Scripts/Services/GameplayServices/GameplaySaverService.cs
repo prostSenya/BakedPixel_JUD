@@ -17,15 +17,16 @@ namespace Services.GameplayServices
 			_staticDataService = staticDataService;
 		}
 
-		public void Save()
+		public async UniTask Save()
 		{
 			SaveLoaderView saveLoaderViewprefab = _staticDataService.GetSaveLoaderView();
 			SaveLoaderView saveLoaderView = Object.Instantiate(saveLoaderViewprefab);
 			_saveLoadService.SaveProgress();
 			
-			int millisecondsDelay = 2000;
+			int millisecondsDelay = 1200;
 			
-			UniTask.Delay(millisecondsDelay).ContinueWith(() => Object.Destroy(saveLoaderView));
+			await UniTask.Delay(millisecondsDelay);
+			Object.Destroy(saveLoaderView.gameObject);
 		}
 	}
 }

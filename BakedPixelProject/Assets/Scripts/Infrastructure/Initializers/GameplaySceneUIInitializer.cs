@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UI.BaseUI.Interfaces;
 using UI.GameplayMenu.Factories.Interfaces;
-using UI.GameplayMenu.Inventories;
-using UI.GameplayMenu.Inventories.Buttons.Views;
 using UI.GameplayMenu.Inventories.Buttons.Views.Implenetations;
 using UI.GameplayMenu.Inventories.Implementations;
 using UnityEngine;
@@ -21,15 +19,15 @@ namespace Infrastructure.Initializers
 		[SerializeField] private RemoveItemButton _removeItemButton;
 		[SerializeField] private ShootButton _shootButton;
 
+		private readonly List<IPresenter> _presenters = new();
+		
 		private IInventoryPresenterFactory _inventoryPresenterFactory;
 		private IAddBulletsButtonPresenterFactory _addBulletsButtonPresenterFactory;
 		private IAddCoinsButtonPresenterFactory _addCoinsButtonPresenterFactory;
 		private IAddItemButtonPresenterFactory _addItemButtonPresenterFactory;
 		private IRemoveItemButtonPresenterFactory _removeItemButtonPresenterFactory;
 		private IShootButtonPresenterFactory _shootButtonPresenterFactory;
-
-		private readonly List<IPresenter> _presenters = new();
-
+		
 		[Inject]
 		private void Construct(
 			IInventoryPresenterFactory inventoryPresenterFactory,
@@ -61,7 +59,7 @@ namespace Infrastructure.Initializers
 				presenter.Activate();
 		}
 
-		private void OnDestroy()
+		private void OnDisable()
 		{
 			foreach (IPresenter presenter in _presenters)
 				presenter.Deactivate();

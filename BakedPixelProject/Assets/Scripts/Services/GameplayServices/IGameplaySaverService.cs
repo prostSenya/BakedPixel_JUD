@@ -1,7 +1,9 @@
-﻿namespace Services.GameplayServices
+﻿using Cysharp.Threading.Tasks;
+
+namespace Services.GameplayServices
 {
 	public interface IGameplaySaverService
 	{
-		void Save();
+		UniTask Save();
 	}
 }

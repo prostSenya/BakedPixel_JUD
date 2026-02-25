@@ -14,11 +14,7 @@ namespace Wallets.Services
 		{
 		}
 
-		public void WriteProgress(ProjectProgress projectProgress)
-		{
-			Debug.Log("WalletSaverService: Writing progress...");
-
+		public void WriteProgress(ProjectProgress projectProgress) => 
 			projectProgress.Inventory.Money = _walletService.Money;
-		}
 	}
 }

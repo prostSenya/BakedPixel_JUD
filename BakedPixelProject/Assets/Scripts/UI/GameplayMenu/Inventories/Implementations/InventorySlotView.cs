@@ -21,11 +21,8 @@ namespace UI.GameplayMenu.Inventories.Implementations
 		protected override void OnDeactivate() => 
 			_button.onClick.RemoveListener(OnButtonClicked);
 
-		private void OnButtonClicked()
-		{
-			Debug.Log("Clicked");
+		private void OnButtonClicked() => 
 			Clicked?.Invoke();
-		}
 
 		public void SetImage(Sprite sprite) => 
 			_image.sprite = sprite;

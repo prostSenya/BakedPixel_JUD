@@ -83,8 +83,6 @@ namespace Services.SaveLoadServices
 
 			for (int i = 0; i < _progressReaders.Count; i++)
 			{
-				Debug.LogError(i + " th reader is " + _progressReaders[i].GetType().Name);
-				
 				if (_progressReaders[i] is IProgressWriter writer)
 					writer.WriteProgress(progress);
 			}

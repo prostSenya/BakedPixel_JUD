@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using Infrastructure.StateMachines.States.Interfaces;
 using Services.GameplayServices;
+using UnityEngine;
 
 namespace Infrastructure.StateMachines.States.Implementations
 {
@@ -14,15 +16,16 @@ namespace Infrastructure.StateMachines.States.Implementations
 			_gameplaySaverService = gameplaySaverService;
 		}
 		
-		public void Enter()
-		{
-			_gameplaySaverService.Save();
-			_gameStateMachine.Enter<GameplayState>();
-		}
-	
+		public void Enter() => 
+			SaveData().Forget();
+
 		public void Exit()
+		{ }
+
+		private async UniTask SaveData()
 		{
-			
+			await _gameplaySaverService.Save();
+			_gameStateMachine.Enter<GameplayState>();
 		}
 	}
 }

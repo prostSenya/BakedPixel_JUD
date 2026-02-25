@@ -92,8 +92,5 @@ namespace UI.GameplayMenu.Inventories.Implementations
 
 		private void ChangeCoinText(int walletMoney) =>
 			View.SetCoinsText(walletMoney.ToString());
-
-		public void WriteProgress(ProjectProgress projectProgress)
-		{ }
 	}
 }
